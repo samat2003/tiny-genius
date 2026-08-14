@@ -1,0 +1,24 @@
+# Candidate study recipes. All share the same evaluation corpus and thresholds.
+
+vocab_size: 32768
+normalization: identity
+seed: 42
+
+candidates:
+  - name: byte_bpe
+    algorithm: byte_bpe
+    description: >
+      Vanilla UTF-8 byte-level BPE. Alphabet is 256 bytes plus specials.
+      Unseen text always falls back to bytes.
+
+  - name: byte_bpe_code
+    algorithm: byte_bpe_code
+    description: >
+      Byte-level BPE whose initial segmentation also includes seeded Python
+      keywords, multi-character operators, and common indent/import pieces.
+
+  - name: unicode_bpe_bytes
+    algorithm: unicode_bpe_bytes
+    description: >
+      BPE over Unicode code points seen in training, with explicit UTF-8 byte
+      fallback for any unseen code point.

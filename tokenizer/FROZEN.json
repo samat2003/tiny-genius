@@ -1,0 +1,17 @@
+{
+  "algorithm": "byte_bpe_code",
+  "candidate": "byte_bpe_code",
+  "corpus": {
+    "evaluation_hash": "6b63dd1277fb53d43567f1a8acfda016cf394d04f210bebb49e2691983520ff7",
+    "extra_lines": 400,
+    "training_hash": "99e0d119ce46f45b00c9d7291ffccfe6074ea49bacfcf551f37e4565ef625bc8",
+    "version": "stage3-eval-v1"
+  },
+  "fingerprint": "219156db6bbe8c573c0f1654ab9f622c0e8bd51519561ac30d2c13fbf3a01a6e",
+  "frozen": true,
+  "frozen_sha256": "291f2c65723136c92b69b0c0676db042202ab19d7e0abda00a052b9335230181",
+  "hashes_ok": true,
+  "stage": 3,
+  "tokenizer_version": "1.0.0",
+  "vocab_size": 32768
+}

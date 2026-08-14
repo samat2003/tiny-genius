@@ -35,6 +35,13 @@ def main() -> int:
         f"tiny_transformer: layers={tiny.n_layers} d_model={tiny.d_model} "
         f"params={model.parameter_count()}"
     )
+    tokenizer_dir = REPO_ROOT / "tokenizer" / "FROZEN.json"
+    if tokenizer_dir.is_file():
+        tok = tiny_genius.Tokenizer.load_frozen()
+        print(
+            f"tokenizer: vocab={tok.vocab_size} algorithm={tok.algorithm} "
+            f"version={tok.version}"
+        )
     print("smoke: ok")
     return 0
 

@@ -1,0 +1,110 @@
+# Stage 3 Gate G3 — predefined acceptance thresholds.
+# Written before candidate training/selection. Do not retune after seeing winners.
+#
+# direction: lower | higher | exact | all
+# kind: hard (must pass) | ranking (used only to break ties among passing candidates)
+
+stage: 3
+version: 1
+selection_rule: >
+  A candidate is eligible only if it passes every hard rule.
+  Among eligible candidates, rank by:
+  1) lower tokens_per_python_line
+  2) lower identifier_fragmentation
+  3) higher compression_ratio
+  4) candidate name (lexicographic, reproducibility tie-break)
+
+metrics:
+  vocab_size:
+    kind: hard
+    direction: exact
+    value: 32768
+    why: Project plan requires a 32,768-token vocabulary.
+    how: Count tokenizer.vocab_size after training/load.
+    failure: Any size other than 32768.
+
+  round_trip_exactness:
+    kind: hard
+    direction: exact
+    value: 1.0
+    why: Source, math, and STEM text must survive encode/decode unchanged.
+    how: Fraction of evaluation documents where decode(encode(text)) == text
+      with add_bos=false, add_eos=false.
+    failure: Any document fails exact equality (no expected-string normalization).
+
+  byte_fallback_success:
+    kind: hard
+    direction: exact
+    value: 1.0
+    why: Unseen Unicode/code points must not crash or drop data.
+    how: Encode/decode a fixed battery of unusual Unicode and raw UTF-8;
+      success rate of exact round-trip.
+    failure: Any fallback sample fails.
+
+  unicode_behavior:
+    kind: hard
+    direction: exact
+    value: 1.0
+    why: STEM notation and non-ASCII identifiers must be robust.
+    how: Exact round-trip on the Unicode/STEM subset of the evaluation corpus.
+    failure: Any Unicode document fails round-trip.
+
+  tokens_per_python_line:
+    kind: hard
+    direction: lower
+    max: 22.0
+    why: Must beat naive character/byte tokenization on typical Python lines
+      (~40–80 units/line). A useful subword model should sit well below that.
+    how: Mean tokens per non-empty Python line in the evaluation corpus.
+    failure: Mean > 22.0
+
+  tokens_per_function:
+    kind: hard
+    direction: lower
+    max: 450.0
+    why: Functions should compress as syntactic units, not explode to
+      character-level length.
+    how: Mean tokens over ast-extracted function source snippets.
+    failure: Mean > 450.0
+
+  identifier_fragmentation:
+    kind: hard
+    direction: lower
+    max: 4.0
+    why: Over-split identifiers hurt code semantics (self, import names, APIs).
+    how: Mean tokens produced by encoding each Python NAME token in isolation.
+    failure: Mean > 4.0
+
+  operator_fragmentation:
+    kind: hard
+    direction: lower
+    max: 2.0
+    why: Multi-character operators (==, //, **, ->) should stay compact.
+    how: Mean tokens produced by encoding each Python OP token in isolation.
+    failure: Mean > 2.0
+
+  import_fragmentation:
+    kind: hard
+    direction: lower
+    max: 18.0
+    why: Import lines are extremely common; they should not fragment badly.
+    how: Mean tokens per logical import/from line.
+    failure: Mean > 18.0
+
+  numeric_literal_handling:
+    kind: hard
+    direction: higher
+    min: 0.90
+    why: Math/code numeric literals should not shatter into many pieces.
+    how: Fraction of Python NUMBER tokens encoded in <= 6 tokens.
+    failure: Fraction < 0.90
+
+  compression_ratio:
+    kind: hard
+    direction: higher
+    min: 1.35
+    why: utf8_bytes / n_tokens must beat raw-byte identity (~1.0) enough to
+      show real subword merging.
+    how: Total UTF-8 bytes of the evaluation corpus divided by total tokens
+      (no BOS/EOS).
+    failure: Ratio < 1.35

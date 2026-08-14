@@ -44,6 +44,14 @@ config = TinyModelConfig.from_yaml("configs/tiny.yaml")
 model = TinyTransformer(config)
 ```
 
+### Stage 3 — Tokenizer (frozen)
+
+Production tokenizer artifacts live in `tokenizer/`. Algorithm: in-repo
+byte-level BPE with Python/operator seed pieces (`byte_bpe_code`), identity
+normalization, byte fallback, vocab **32768**. See `docs/tokenizer.md`.
+
+The Tiny Transformer is **not** remapped onto this vocabulary yet.
+
 ## Planned (later stages)
 
 The frozen **target** from the project plan is a ~296.9M decoder-only Transformer

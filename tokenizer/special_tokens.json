@@ -1,0 +1,17 @@
+{
+  "insertion": {
+    "add_bos_default": false,
+    "add_eos_default": false
+  },
+  "policy": "Special IDs are reserved and never produced by encode() of raw text. encode(text) does not insert BOS/EOS unless add_bos/add_eos is true. decode(..., skip_special_tokens=True) drops specials. The surface strings <bos> etc. in user text are ordinary bytes.",
+  "tokens": {
+    "bos": "<bos>",
+    "bos_id": 2,
+    "eos": "<eos>",
+    "eos_id": 3,
+    "pad": "<pad>",
+    "pad_id": 0,
+    "unk": "<unk>",
+    "unk_id": 1
+  }
+}

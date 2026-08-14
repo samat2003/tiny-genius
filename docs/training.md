@@ -42,6 +42,12 @@ updates match a continuous run on CPU.
 on **CPU** with `dropout=0`. CUDA / cuDNN are not claimed to be bit-identical
 across devices or library versions.
 
+### Stage 3
+
+Tokenizer training is a one-shot freeze (`scripts/train_tokenizer.py`). After
+`tokenizer/FROZEN.json` exists, the process will not silently regenerate the
+artifact. See `docs/tokenizer.md`.
+
 ## Not implemented
 
 BF16/FP8, distributed training, large-token-batch trainers, production

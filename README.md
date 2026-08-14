@@ -87,4 +87,8 @@ debug model (`configs/tiny.yaml`). The 300M model is not implemented.
 
 ```bash
 python scripts/train_tiny.py --config configs/tiny.yaml
+python scripts/verify_tokenizer.py
 ```
+
+Stage 3 freezes the production tokenizer in `tokenizer/` (32,768 tokens).
+The Tiny Transformer still uses its debug vocabulary.

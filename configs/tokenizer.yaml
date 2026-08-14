@@ -1,0 +1,13 @@
+# Stage 3 tokenizer contract. Values here describe the freeze process.
+# The winning algorithm is recorded after the candidate study into
+# tokenizer/FROZEN.json — this file is the training/eval recipe, not 300M data.
+
+name: tokenizer
+stage: 3
+vocab_size: 32768
+normalization: identity
+byte_fallback: true
+tie_to_model: false
+notes: >
+  Identity normalization preserves Python indentation, tabs, newlines, and
+  Unicode code points. encode() does not insert BOS/EOS unless requested.

@@ -18,6 +18,7 @@ def test_public_api_exports() -> None:
         "collect_environment",
         "TinyTransformer",
         "TinyModelConfig",
+        "Tokenizer",
     ):
         assert hasattr(tiny_genius, name)
         assert callable(getattr(tiny_genius, name))
