@@ -1,4 +1,4 @@
-# Rocket AI
+# Tiny Genius
 
 A from-scratch engineering project for building and training a compact decoder-only Transformer for code, mathematics, and STEM.
 
