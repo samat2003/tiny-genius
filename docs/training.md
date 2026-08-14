@@ -1,30 +1,50 @@
 # Training
 
-## Implemented now (Stage 0)
+## Implemented now
 
-- Seed policy and environment metadata collection.
-- A development configuration that is **not** a training recipe.
-- No trainer, optimizer, scheduler, checkpointing, BF16, FP8, or distributed code.
+### Stage 0
 
-## Planned
+- Seed policy (`set_global_seed`) and environment metadata.
 
-Training follows the project plan: tiny end-to-end trainability first, then
-tokenizer and data manifests, a BF16 baseline, optional FP8, large-token-batch
-distributed training, scaling pilots, then a frozen RUN SPEC before the 13B-token
-pretraining budget.
+### Stage 2
 
-### What is frozen when
+- A **debug** next-token loop on a fixed integer corpus (`make_tiny_corpus`).
+- No tokenizer. Token ids are synthetic modular sequences.
+- Optimizer: AdamW, used only to prove learning and resume.
+- Command:
 
-| When | Frozen ingredient |
+```bash
+python scripts/train_tiny.py --config configs/tiny.yaml
+```
+
+Checkpoints write under `artifacts/` (gitignored except `artifacts/README.md`).
+
+### Checkpoint format (`tiny-genius-checkpoint` v1)
+
+A `torch.save` dict:
+
+| Key | Meaning |
 |---|---|
-| After tokenizer stage | Tokenizer artifact + hash |
-| After data pipeline | Dataset manifests and fingerprints |
-| After RUN SPEC freeze | Full 300M training contract |
-| After SFT/RL | Evaluation decoding settings |
+| `format` / `format_version` | Identity (`tiny-genius-checkpoint`, `1`) |
+| `step` | Completed training steps |
+| `config` | `TinyModelConfig` mapping |
+| `model` | `state_dict` |
+| `optimizer` | AdamW `state_dict` (or `None`) |
+| `rng` | Python and PyTorch RNG payloads |
+| `metadata` | Optional extras plus environment snapshot |
 
-Until the RUN SPEC freeze, `RUN_SPEC.yaml` stays `frozen: false`.
+Resume restores model weights, optimizer state, step, and RNG so the next
+updates match a continuous run on CPU.
 
-### Seed policy
+### Determinism
 
-Every meaningful run records an integer seed. `set_global_seed` currently seeds
-Python `random` and `PYTHONHASHSEED`. Additional backends are seeded when added.
+`set_global_seed` seeds Python and PyTorch. Tests expect bit-stable trajectories
+on **CPU** with `dropout=0`. CUDA / cuDNN are not claimed to be bit-identical
+across devices or library versions.
+
+## Not implemented
+
+BF16/FP8, distributed training, large-token-batch trainers, production
+checkpoint sharding, SFT, and RL.
+
+Until the RUN SPEC freeze stage, `RUN_SPEC.yaml` stays `frozen: false`.

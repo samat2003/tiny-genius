@@ -6,7 +6,7 @@ training hyperparameters.
 | File | Status | Purpose |
 |---|---|---|
 | `stage0.yaml` | Implemented now | Development / Stage 0 identity and seed |
-| `tiny.yaml` | Planned (Stage 1 Tiny Transformer) | Debug model |
+| `tiny.yaml` | Implemented (Stage 2) | Debug Tiny Transformer |
 | `small.yaml` / `medium.yaml` | Planned | Scaling experiments |
 | `model_300m.yaml` | Planned | Architecture freeze candidate |
 | `pretrain.yaml` / `sft.yaml` / `rl.yaml` | Planned | Training-phase recipes |

@@ -1,10 +1,10 @@
 # Release
 
-## Implemented now (Stage 0)
+## Implemented now (Stage 0–2)
 
-- Public repository scaffolding and installable package metadata.
-- Documentation of what a later release must contain.
-- No model weights, tokenizer artifacts, or evaluation reports.
+- Installable package and Stage 2 Tiny Transformer reference implementation.
+- Checkpoint format for the debug trainer.
+- No production weights, tokenizer artifacts, or evaluation reports.
 
 ## Planned release package
 

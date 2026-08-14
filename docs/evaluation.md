@@ -1,8 +1,9 @@
 # Evaluation
 
-## Implemented now (Stage 0)
+## Implemented now (Stage 0–2)
 
-- No benchmark runners.
+- No public-benchmark runners.
+- Stage 2 validates learning only via next-token loss on a synthetic corpus.
 - No HumanEval / MBPP integration.
 - No decoding or execution harness.
 

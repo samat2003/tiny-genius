@@ -28,6 +28,13 @@ def main() -> int:
     print(f"config.name: {config['name']}")
     print(f"seed: {seed}")
     print(f"git_commit: {env.get('git_commit')}")
+
+    tiny = tiny_genius.TinyModelConfig.from_yaml(REPO_ROOT / "configs" / "tiny.yaml")
+    model = tiny_genius.TinyTransformer(tiny)
+    print(
+        f"tiny_transformer: layers={tiny.n_layers} d_model={tiny.d_model} "
+        f"params={model.parameter_count()}"
+    )
     print("smoke: ok")
     return 0
 

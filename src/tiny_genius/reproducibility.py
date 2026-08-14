@@ -23,9 +23,10 @@ DEFAULT_SEED = 42
 
 
 def set_global_seed(seed: int = DEFAULT_SEED, *, deterministic: bool = True) -> int:
-    """Seed Python's `random` and `PYTHONHASHSEED` for Stage 0 determinism.
+    """Seed Python `random` and, when available, PyTorch.
 
-    NumPy / PyTorch seeding is deferred until those libraries are added.
+    Exact bit-for-bit reproducibility is expected on CPU with dropout=0.
+    CUDA / cuDNN kernels are not guaranteed to match across devices or versions.
     """
     if not isinstance(seed, int):
         raise TypeError(f"seed must be an int, got {type(seed).__name__}")
@@ -35,6 +36,18 @@ def set_global_seed(seed: int = DEFAULT_SEED, *, deterministic: bool = True) -> 
         os.environ["TINY_GENIUS_DETERMINISTIC"] = "1"
     else:
         os.environ.pop("TINY_GENIUS_DETERMINISTIC", None)
+    try:
+        import torch
+    except ImportError:
+        return seed
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    if deterministic:
+        torch.use_deterministic_algorithms(True, warn_only=True)
+        if torch.backends.cudnn.is_available():
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
     return seed
 
 

@@ -16,6 +16,8 @@ def test_public_api_exports() -> None:
         "load_run_spec",
         "set_global_seed",
         "collect_environment",
+        "TinyTransformer",
+        "TinyModelConfig",
     ):
         assert hasattr(tiny_genius, name)
         assert callable(getattr(tiny_genius, name))

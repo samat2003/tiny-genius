@@ -82,5 +82,9 @@ python -m pytest
 
 `make test`, `make lint`, and `make smoke` wrap the same checks.
 
-Stage 0 is the engineering foundation (package, config contract, tests). The
-Tiny Transformer is not implemented yet.
+Stage 0 is the engineering foundation. Stage 2 implements the **Tiny Transformer**
+debug model (`configs/tiny.yaml`). The 300M model is not implemented.
+
+```bash
+python scripts/train_tiny.py --config configs/tiny.yaml
+```
