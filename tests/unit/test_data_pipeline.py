@@ -130,4 +130,45 @@ def test_unresolved_source_is_blocked() -> None:
     assert reason
     taco = next(s for s in registry["sources"] if s["source_id"] == "taco")
     status2, _ = license_decision(taco, allow)
-    assert status2 == "admitted"
+    assert status2 == "blocked"
+    ccp = next(s for s in registry["sources"] if s["source_id"] == "codecontests_plus")
+    status3, _ = license_decision(ccp, allow)
+    assert status3 == "admitted"
+
+
+def test_english_and_os_filters() -> None:
+    thresholds, _, _ = load_pipeline_config()
+    cyr = {
+        "text": "def solve():\n    # решение\n    return 1\n",
+        "domain": "python",
+        "source_id": "codecontests_plus",
+        "language_tag": "python",
+    }
+    assert "non_english" in quality_reasons(cyr, thresholds)
+    io_doc = {
+        "text": "import subprocess\nsubprocess.call(['ls'])\n",
+        "domain": "python",
+        "source_id": "taco",
+        "language_tag": "python",
+    }
+    assert "os_io_boilerplate" in quality_reasons(io_doc, thresholds)
+
+
+def test_ccp_keeps_only_py3() -> None:
+    from tiny_genius.data.ingest import expand_contest_row
+
+    row = {
+        "id": "1_A",
+        "title": "Demo",
+        "description": "Compute the sum of two integers.",
+        "correct_submissions": [
+            {"language": "cpp", "code": "#include <bits/stdc++.h>\nint main(){}"},
+            {"language": "py2", "code": "print input()"},
+            {"language": "py3", "code": "print(sum(map(int, input().split())))\n"},
+            {"language": "java", "code": "import java.io.*;\nclass M {}"},
+            {"language": "py3", "code": "a,b=map(int,input().split())\nprint(a+b)\n"},
+        ],
+    }
+    docs = expand_contest_row(row, cap=8)
+    assert len(docs) == 2
+    assert all("print" in d["solution"] for d in docs)

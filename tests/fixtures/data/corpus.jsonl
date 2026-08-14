@@ -28,4 +28,4 @@
 {"source_id": "pythonbook", "text": "Chapter 1. Variables in Python bind names to objects.\n"}
 {"source_id": "jina_textbook", "text": "A textbook paragraph about writing clean Python functions and tests.\n"}
 {"source_id": "spp_30k_verified", "text": "def verified_example(x):\n    return x\n"}
-{"source_id": "code_contest_python3", "text": "def contest_py3():\n    return 0\n"}
+{"source_id": "deepmind_code_contests", "text": "def contest_py3():\n    return 0\n"}

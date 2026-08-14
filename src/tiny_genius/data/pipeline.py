@@ -10,9 +10,12 @@ from tiny_genius.config import REPO_ROOT, load_yaml
 from tiny_genius.data.contamination import scan_contamination
 from tiny_genius.data.contract import validate_source_record
 from tiny_genius.data.dedup import apply_problem_cap, exact_dedup, near_dedup
-from tiny_genius.data.ingest import extract_text_from_hf_row, make_document
+from tiny_genius.data.ingest import (
+    expand_source_rows,
+    extract_text_from_hf_row,
+    make_document,
+)
 from tiny_genius.data.license import license_decision, load_allowlist
-from tiny_genius.data.metrics import build_metrics
 from tiny_genius.data.packing import pack_documents
 from tiny_genius.data.quality import apply_quality
 from tiny_genius.data.sources import iter_sources, load_source_registry
@@ -265,8 +268,11 @@ def docs_from_rows(
     rows: list[dict[str, Any]],
     source: dict[str, Any],
     collection_date: str,
+    *,
+    cap: int = 8,
 ) -> list[dict[str, Any]]:
     docs: list[dict[str, Any]] = []
+    rows = expand_source_rows(source["source_id"], rows, cap=cap)
     for index, row in enumerate(rows):
         text, extra = extract_text_from_hf_row(source["source_id"], row)
         if not text:
@@ -292,7 +298,10 @@ def try_stream_hf(source: dict[str, Any], max_rows: int) -> tuple[list[dict[str,
     except ImportError:
         return [], "huggingface datasets library not installed"
     try:
-        ds = load_dataset(source["hf_id"], split="train", streaming=True)
+        kwargs: dict[str, Any] = {"split": "train", "streaming": True}
+        if source.get("hf_config"):
+            kwargs["name"] = source["hf_config"]
+        ds = load_dataset(source["hf_id"], **kwargs)
     except Exception as exc:  # noqa: BLE001 — must record BLOCKED reason
         return [], f"fetch failed: {exc}"
     rows: list[dict[str, Any]] = []

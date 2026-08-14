@@ -1,18 +1,18 @@
 # 10M milestone status
 
-**Not frozen.** `FROZEN_10M.json` is absent because the 10M token target was
-not reached without substituting datasets.
+**Not frozen.** High-quality data after the authorized Python reselection is
+still below 10M tokens, and STEM exclusive FineWeb buckets remain BLOCKED.
 
-- Actual retained tokens after the pipeline: **56,020** (math only).
-- Python admitted sources TACO and APPS failed fetch (Hub dataset scripts no
-  longer supported). They are BLOCKED with that reason — not replaced.
-- CodeContests+, TinyPython, SPP_30k_verified, Jina Textbook, pythonbook,
-  Code Contest Python3, and all FineWeb-Edu exclusive buckets are BLOCKED for
-  unresolved identity or missing official splits.
-- OpenMathInstruct-2 (cc-by-4.0) admitted 80 streamed rows for this inventory
-  run. Scaling that source cannot fill the 7.69M Python or 0.77M STEM quotas.
+Probe run (80 CodeContests+ problems + 80 OpenMathInstruct-2 rows):
 
-These JSON/JSONL files are an auditable **inventory + probe**, not a frozen
-10M training corpus. Reaching 10M requires the BLOCKED sources to become
-uniquely identified, licensed, and fetchable — or an explicit authorization
-to change the source list (not granted this pass).
+| Domain | Tokens after pipeline |
+|---|---:|
+| Python (CCP py3 correct, cap 8, English) | 457,196 |
+| Math (OMI-2) | 56,020 |
+| STEM | 0 |
+| **Total** | **513,216** |
+
+Scaling CCP further can grow Python, but STEM still has no authorized fetchable
+source, and this pass will not invent one. A 10M freeze is therefore withheld.
+
+See `docs/python_dataset_selection.md` for KEEP/REJECT evidence.

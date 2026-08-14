@@ -35,5 +35,5 @@ python scripts/verify_data_manifest.py
 ```
 
 `FROZEN_10M.json` is written only when the 10M token target is actually met
-and then refuses in-place overwrite. The first authorized pass did **not**
-freeze: see `manifests/10m/README.md`.
+and then refuses in-place overwrite. The 10M sample is **not frozen**. Python KEEP is CodeContests+ (`py3` only);
+see `docs/python_dataset_selection.md`. STEM sources remain unresolved.

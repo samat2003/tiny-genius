@@ -11,6 +11,8 @@ def load_allowlist(thresholds: dict[str, Any]) -> set[str]:
 
 def license_decision(source: dict[str, Any], allowlist: set[str]) -> tuple[str, str | None]:
     """Return (status, reason). status is admitted or blocked."""
+    if source.get("decision") == "reject":
+        return "blocked", (source.get("block_reason") or "rejected after inspection").strip()
     if source.get("identity_status") != "verified":
         return "blocked", (source.get("block_reason") or "unresolved identity").strip()
     license_id = source.get("claimed_license")

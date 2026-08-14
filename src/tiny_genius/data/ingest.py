@@ -42,6 +42,44 @@ def make_document(
     return doc
 
 
+def looks_python3(code: str, language: str) -> bool:
+    lang = (language or "").lower().replace(" ", "")
+    if lang in {"py3", "python3", "python"}:
+        return True
+    if lang in {"py2", "python2", "cpp", "c++", "java", "csharp", "go", "rust"}:
+        return False
+    return False
+
+
+def expand_contest_row(row: dict[str, Any], *, cap: int = 8) -> list[dict[str, Any]]:
+    """Emit problem+Python3-correct pairs. Skip infrastructure and non-py3."""
+    title = str(row.get("title") or row.get("name") or "")
+    desc = str(row.get("description") or "")
+    pid = str(row.get("id") or row.get("name") or title)
+    out: list[dict[str, Any]] = []
+    subs = row.get("correct_submissions") or []
+    for sub in subs:
+        if not isinstance(sub, dict):
+            continue
+        lang = str(sub.get("language") or "")
+        code = str(sub.get("code") or "")
+        if not looks_python3(code, lang):
+            continue
+        text = f"# {title}\n# {pid}\n\n{desc}\n\n# solution\n{code}\n"
+        out.append(
+            {
+                "text": text,
+                "problem_id": pid,
+                "is_correct": True,
+                "language_tag": "python",
+                "solution": code,
+            }
+        )
+        if len(out) >= cap:
+            break
+    return out
+
+
 def extract_text_from_hf_row(source_id: str, row: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     extra: dict[str, Any] = {}
     if source_id == "taco":
@@ -90,5 +128,19 @@ def extract_text_from_hf_row(source_id: str, row: dict[str, Any]) -> tuple[str, 
         return f"{problem}\n\n{solution}", extra
     # Generic fallback for fixtures only.
     text = str(row.get("text") or "")
-    extra.update({k: row[k] for k in ("problem_id", "is_correct", "language_tag", "solution") if k in row})
+    keys = ("problem_id", "is_correct", "language_tag", "solution")
+    extra.update({k: row[k] for k in keys if k in row})
     return text, extra
+
+
+def expand_source_rows(
+    source_id: str, rows: list[dict[str, Any]], *, cap: int = 8
+) -> list[dict[str, Any]]:
+    if source_id == "codecontests_plus":
+        expanded: list[dict[str, Any]] = []
+        for row in rows:
+            payload = dict(row)
+            if payload.get("correct_submissions") is not None:
+                expanded.extend(expand_contest_row(payload, cap=cap))
+        return expanded
+    return rows

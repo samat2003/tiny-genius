@@ -1,9 +1,8 @@
 {
   "blocked_sources": [
-    "codecontests_plus",
+    "deepmind_code_contests",
     "taco",
     "apps",
-    "code_contest_python3",
     "tiny_python",
     "spp_30k_verified",
     "jina_textbook",
@@ -16,8 +15,128 @@
     "fineweb_edu_ml_ai"
   ],
   "codecontests_solutions_per_problem": {
-    "after": {},
-    "before": {}
+    "after": {
+      "1032_A": 4,
+      "1043_C": 6,
+      "1089_G": 8,
+      "1118_D2": 5,
+      "1146_B": 6,
+      "1172_C2": 1,
+      "1296_E1": 7,
+      "1321_D": 6,
+      "1324_A": 1,
+      "1333_E": 6,
+      "133_C": 3,
+      "1340_C": 3,
+      "1344_B": 8,
+      "1362_C": 1,
+      "1364_D": 8,
+      "1401_D": 8,
+      "1426_E": 5,
+      "1447_B": 8,
+      "146_D": 4,
+      "1516_D": 6,
+      "1520_B": 7,
+      "1569_B": 8,
+      "1579_C": 4,
+      "1607_G": 5,
+      "1623_D": 4,
+      "176_C": 2,
+      "270_A": 3,
+      "448_B": 7,
+      "456_B": 4,
+      "484_A": 5,
+      "690_F1": 4,
+      "710_E": 7,
+      "715_B": 2,
+      "731_F": 6,
+      "83_D": 2,
+      "922_A": 6,
+      "926_C": 6,
+      "p00079": 7,
+      "p00120": 4,
+      "p00208": 3,
+      "p00330": 1,
+      "p00333": 3,
+      "p00364": 1,
+      "p00519": 1,
+      "p00775": 4,
+      "p01531": 1,
+      "p01561": 1,
+      "p01928": 2,
+      "p01960": 1,
+      "p02553": 2,
+      "p02597": 1,
+      "p02966": 1,
+      "p02990": 3,
+      "p03330": 8,
+      "p03626": 8,
+      "p03832": 7,
+      "p04007": 6
+    },
+    "before": {
+      "1032_A": 8,
+      "1043_C": 8,
+      "104_D": 2,
+      "1089_G": 8,
+      "1118_D2": 8,
+      "1146_B": 8,
+      "1172_C2": 1,
+      "119_C": 4,
+      "1296_E1": 8,
+      "1321_D": 8,
+      "1324_A": 8,
+      "1333_E": 8,
+      "133_C": 8,
+      "1340_C": 8,
+      "1344_B": 8,
+      "1362_C": 8,
+      "1364_D": 8,
+      "1401_D": 8,
+      "1426_E": 8,
+      "1447_B": 8,
+      "146_D": 4,
+      "1516_D": 8,
+      "1520_B": 8,
+      "1569_B": 8,
+      "1579_C": 8,
+      "1607_G": 5,
+      "1623_D": 5,
+      "176_C": 4,
+      "270_A": 8,
+      "319_C": 8,
+      "448_B": 8,
+      "456_B": 8,
+      "484_A": 8,
+      "690_F1": 8,
+      "710_E": 8,
+      "715_B": 5,
+      "731_F": 8,
+      "83_D": 2,
+      "8_C": 6,
+      "922_A": 8,
+      "926_C": 8,
+      "p00079": 8,
+      "p00120": 8,
+      "p00208": 8,
+      "p00330": 8,
+      "p00333": 8,
+      "p00364": 8,
+      "p00519": 5,
+      "p00775": 8,
+      "p01531": 5,
+      "p01561": 1,
+      "p01928": 2,
+      "p01960": 1,
+      "p02553": 8,
+      "p02597": 8,
+      "p02966": 2,
+      "p02990": 8,
+      "p03330": 8,
+      "p03626": 8,
+      "p03832": 8,
+      "p04007": 8
+    }
   },
   "contamination_hits": {
     "benchmark_refs_missing": [
@@ -32,10 +151,16 @@
   "exact_duplicate_rate": {
     "rate": 0.0,
     "removed": 0,
-    "start": 80
+    "start": 494
   },
   "max_subsource_share": {
     "math": {
+      "applicable": false,
+      "available_sources": 1,
+      "reason": "fewer than 3 available (non-BLOCKED) sources in this domain",
+      "status": "not_applicable"
+    },
+    "python": {
       "applicable": false,
       "available_sources": 1,
       "reason": "fewer than 3 available (non-BLOCKED) sources in this domain",
@@ -45,13 +170,13 @@
   "mixture": {
     "actual": {
       "math": 56020,
-      "python": 0,
+      "python": 457196,
       "stem": 0,
-      "total": 56020
+      "total": 513216
     },
     "deviation_tokens": {
       "math": -1483980,
-      "python": -7690000,
+      "python": -7232804,
       "stem": -770000
     },
     "math_raw_estimate_vs_plan": {
@@ -76,39 +201,43 @@
     }
   },
   "near_duplicate_rate": {
-    "rate": 0.0,
-    "removed": 0,
-    "start": 80
+    "rate": 0.29554655870445345,
+    "removed": 146,
+    "start": 494
   },
   "packing": {
     "n_ctx": 4096,
-    "n_sequences": 15,
+    "n_sequences": 157,
     "n_shards": 1,
-    "packed_tokens": 61440,
-    "pad_tokens": 5420,
+    "packed_tokens": 643072,
+    "pad_tokens": 131624,
     "shards": [
       {
-        "n_sequences": 15,
+        "n_sequences": 157,
         "shard_id": "shard-00000"
       }
     ],
-    "truncated_docs": 0,
-    "waste_ratio": 0.08821614583333333
+    "truncated_docs": 4,
+    "waste_ratio": 0.20468003582802546
   },
   "post_pipeline_tokens_per_domain": {
     "math": 56020,
-    "python": 0,
+    "python": 457196,
     "stem": 0
   },
   "post_pipeline_tokens_per_source": {
+    "codecontests_plus": 457196,
     "openmathinstruct_2": 56020
   },
   "quality_rejection": {
-    "rate": 0.0,
-    "reason_codes": {},
-    "removed": 0
+    "rate": 0.03441295546558704,
+    "reason_codes": {
+      "non_english": 17
+    },
+    "removed": 17
   },
   "raw_token_count_per_source": {
+    "codecontests_plus": 717405,
     "openmathinstruct_2": 55940
   },
   "tokenizer_fingerprint": "219156db6bbe8c573c0f1654ab9f622c0e8bd51519561ac30d2c13fbf3a01a6e"
