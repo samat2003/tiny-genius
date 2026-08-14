@@ -57,7 +57,7 @@ Each stage has tests, reproducible commands, artifacts, and a clear completion c
 ## Repository Structure
 
 ```text
-rocket-ai/
+tiny-genius/
 ├── README.md
 ├── 300M_Dense_Transformer_Full_Project_Plan.md
 ├── configs/
