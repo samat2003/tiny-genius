@@ -1,0 +1,54 @@
+# Tiny Genius run contract — Stage 0 schema
+#
+# This file is the reproducibility / configuration contract.
+# Values below describe the engineering foundation, NOT a frozen 300M training run.
+# Stage 9 of the project plan is when the 300M RUN SPEC is frozen.
+
+# Human-readable project name. Must remain "Tiny Genius".
+project: Tiny Genius
+
+# Package / contract version (semver). Independent of the unfrozen model recipe.
+version: 0.1.0
+
+# Python interpreter constraint used by the package metadata.
+python:
+  requires: ">=3.10"
+  recommended: "3.12"
+
+# Seed policy (Stage 0):
+# - One integer global seed is recorded on every meaningful run.
+# - set_global_seed() seeds Python's random module and PYTHONHASHSEED.
+# - NumPy / CUDA / PyTorch seeding is added when those backends are introduced.
+# - The seed is not a training hyperparameter for the 300M model.
+reproducibility:
+  seed: 42
+  deterministic: true
+  policy: >
+    Record seed, git commit, config identity, and environment metadata on every run.
+    Do not silently change frozen ingredients after the Stage 9 RUN SPEC freeze.
+
+# Device / backend at Stage 0 is informational. Training backends arrive later.
+device:
+  backend: cpu
+  requested: auto
+  notes: "No GPU training path is implemented at Stage 0."
+
+# Configuration identity. frozen=false until Stage 9.
+config:
+  identity: stage0-dev
+  stage: 0
+  frozen: false
+  path: configs/stage0.yaml
+
+# Dependency reference: install from pyproject.toml rather than pinning a lockfile yet.
+dependencies:
+  source: pyproject.toml
+  extra: dev
+
+# Run metadata template. Concrete timestamps/commits are collected at runtime.
+metadata:
+  schema_version: 1
+  created_for: "Stage 0 project contract"
+  notes: >
+    Do not treat this file as the final pretraining recipe.
+    Later stages will add tokenizer hash, dataset fingerprint, and checkpoint lineage.

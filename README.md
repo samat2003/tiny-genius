@@ -60,10 +60,27 @@ Each stage has tests, reproducible commands, artifacts, and a clear completion c
 tiny-genius/
 ├── README.md
 ├── 300M_Dense_Transformer_Full_Project_Plan.md
+├── pyproject.toml
+├── RUN_SPEC.yaml
 ├── configs/
 ├── src/
+│   └── tiny_genius/
 ├── scripts/
 ├── tests/
 ├── docs/
-├── artifacts/
-└── RUN_SPEC.yaml
+└── artifacts/
+```
+
+## Stage 0 quickstart
+
+```bash
+python -m pip install -e ".[dev]"
+python -c "import tiny_genius; print(tiny_genius.__version__)"
+python scripts/smoke.py
+python -m pytest
+```
+
+`make test`, `make lint`, and `make smoke` wrap the same checks.
+
+Stage 0 is the engineering foundation (package, config contract, tests). The
+Tiny Transformer is not implemented yet.

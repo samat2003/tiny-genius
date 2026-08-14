@@ -32,7 +32,8 @@ htmlcov/
 # Model/training artifacts
 checkpoints/
 runs/
-artifacts/
+artifacts/*
+!artifacts/README.md
 *.ckpt
 *.pt
 *.pth
