@@ -1,0 +1,155 @@
+# Fixed Stage 4 source registry. Do not add, remove, or substitute entries.
+# identity_status=unresolved → runtime BLOCKED (no guessed Hugging Face id).
+
+sources:
+  - source_id: codecontests_plus
+    domain: python
+    claimed_origin: "CodeContests+ (Wang et al., 2025; arXiv:2506.05817)"
+    claimed_url: "https://arxiv.org/abs/2506.05817"
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      CodeContests+ is described in a paper as an improved-test-case revision of
+      CodeContests. No uniquely identified, license-verified public dump was
+      bound in this registry. deepmind/code_contests and CodeContests-O are
+      different artifacts and must not be substituted.
+
+  - source_id: taco
+    domain: python
+    claimed_origin: "BAAI/TACO"
+    claimed_url: "https://huggingface.co/datasets/BAAI/TACO"
+    claimed_license: apache-2.0
+    identity_status: verified
+    hf_id: BAAI/TACO
+
+  - source_id: apps
+    domain: python
+    claimed_origin: "codeparrot/apps (Hendrycks APPS)"
+    claimed_url: "https://huggingface.co/datasets/codeparrot/apps"
+    claimed_license: mit
+    identity_status: verified
+    hf_id: codeparrot/apps
+
+  - source_id: code_contest_python3
+    domain: python
+    claimed_origin: "Code Contest Python3"
+    claimed_url: null
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      Name does not uniquely identify a licensed dataset. Not bound to
+      deepmind/code_contests or any other contest dump.
+
+  - source_id: tiny_python
+    domain: python
+    claimed_origin: "TinyPython"
+    claimed_url: null
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      Name is ambiguous (book, interpreter, and unrelated Hub repos). No unique
+      licensed artifact was bound.
+
+  - source_id: spp_30k_verified
+    domain: python
+    claimed_origin: "SPP_30k_verified"
+    claimed_url: null
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      No uniquely identified, license-verified public dataset was bound.
+
+  - source_id: jina_textbook
+    domain: python
+    claimed_origin: "Jina Textbook"
+    claimed_url: null
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      No uniquely identified Jina textbook dump with a verifiable allowlisted
+      license was bound.
+
+  - source_id: pythonbook
+    domain: python
+    claimed_origin: "pythonbook"
+    claimed_url: null
+    claimed_license: null
+    identity_status: unresolved
+    block_reason: >
+      Name is ambiguous. No uniquely identified licensed artifact was bound.
+
+  - source_id: openmathinstruct_2
+    domain: math
+    claimed_origin: "nvidia/OpenMathInstruct-2"
+    claimed_url: "https://huggingface.co/datasets/nvidia/OpenMathInstruct-2"
+    claimed_license: cc-by-4.0
+    identity_status: verified
+    hf_id: nvidia/OpenMathInstruct-2
+    notes: "Problem-solving/reasoning data, not mathematical exposition."
+
+  - source_id: fineweb_edu_math
+    domain: math
+    claimed_origin: "FineWeb-Edu Mathematics"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      HuggingFaceFW/fineweb-edu is licensed odc-by-1.0 but has no official
+      exclusive Mathematics split in this registry. Heuristic URL/subject
+      filters would invent a subset and are not permitted.
+
+  - source_id: fineweb_edu_physical_sciences
+    domain: stem
+    stem_bucket: physical_sciences
+    claimed_origin: "FineWeb-Edu Curated / Physical Sciences"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      No official exclusive Physical Sciences curated dump was bound. Classifying
+      generic FineWeb-Edu locally would invent a bucket.
+
+  - source_id: fineweb_edu_computer_science
+    domain: stem
+    stem_bucket: computer_science
+    claimed_origin: "FineWeb-Edu Curated / Computer Science"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      No official exclusive Computer Science curated dump was bound.
+
+  - source_id: fineweb_edu_life_sciences
+    domain: stem
+    stem_bucket: life_sciences
+    claimed_origin: "FineWeb-Edu Curated / Life Sciences"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      No official exclusive Life Sciences curated dump was bound.
+
+  - source_id: fineweb_edu_engineering
+    domain: stem
+    stem_bucket: engineering
+    claimed_origin: "FineWeb-Edu Curated / Engineering/Technology"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      No official exclusive Engineering/Technology curated dump was bound.
+
+  - source_id: fineweb_edu_ml_ai
+    domain: stem
+    stem_bucket: ml_ai
+    claimed_origin: "FineWeb-Edu Curated / ML/AI"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
+    claimed_license: odc-by-1.0
+    identity_status: unresolved
+    block_reason: >
+      No official exclusive ML/AI curated dump was bound.
+
+math_raw_estimate_tokens: 2_630_000_000
+math_plan_target_tokens: 2_000_000_000
+stem_raw_estimate_tokens: 1_000_000_000
+python_raw_estimate_tokens: null

@@ -1,0 +1,131 @@
+# Stage 4 Gate G4 — predefined data-pipeline thresholds.
+# Written before any real 10M run. Do not retune after seeing milestone metrics.
+#
+# These values are fixed constraints, not search knobs.
+
+stage: 4
+version: 1
+
+mixture_13b_target:
+  python: 10_000_000_000
+  math: 2_000_000_000
+  stem: 1_000_000_000
+  notes: >
+    Official project-plan target (76.9 / 15.4 / 7.7%). Math raw intake estimate
+    is ~2.63B; the 0.63B gap is closed only by documented down-selection, never
+    by silent mixture drift.
+
+mixture_10m_target:
+  python: 7_690_000
+  math: 1_540_000
+  stem: 770_000
+  total: 10_000_000
+  notes: >
+    Proportional 10M milestone only. The 13B domain counts are not-applicable
+    at this scale.
+
+thresholds:
+  codecontests_max_solutions_per_problem:
+    kind: hard
+    value: 8
+    direction: max
+    why: Prevents one problem from dominating the ~13M-solution CodeContests+ dump.
+    how: After Python + verified-correct filter, keep <=8 solutions per problem_id
+      (stable sort by solution normalized hash).
+    failure: Any retained problem has more than 8 solutions.
+
+  exact_dedup_hash:
+    kind: hard
+    algorithm: sha256
+    hashed_payload: normalized_utf8_text
+    why: Exact duplicates after code-safe normalize must not survive.
+    how: SHA-256 of normalized UTF-8 text. Raw-byte hash is still recorded.
+    failure: Two retained documents share the same normalized hash.
+
+  near_dedup:
+    kind: hard
+    method: minhash_char_5gram
+    permutations: 128
+    jaccard_cutoff: 0.8
+    keep_order: [source_id, doc_id]
+    why: Near-duplicate boilerplate (especially same-problem solutions) inflates
+      token counts without new signal.
+    how: Char 5-shingles, 128 deterministic MinHash perms
+      (sha256(f"{i}:{shingle}")), drop later docs with estimated Jaccard >= 0.8.
+    failure: A kept pair still scores >= 0.8.
+
+  min_quality_score:
+    kind: hard
+    value: 2.0
+    applies_when: source_provides_score
+    why: FineWeb-Edu educational score is the source's own quality signal.
+    how: Drop documents with score < 2.0 when a score is present. Missing score
+      does not auto-pass; domain rules still apply.
+    failure: A retained scored document has score < 2.0.
+
+  code_must_parse:
+    kind: hard
+    value: true
+    why: Python domain text that is not parseable is not usable code.
+    how: ast.parse on python-domain documents. Reason syntax_invalid.
+    failure: A retained python-domain document fails ast.parse.
+
+  openmath_min_solution_chars:
+    kind: hard
+    value: 20
+    why: OpenMathInstruct-2 is synthetic problem-solving data; trivial solutions
+      must not be accepted uncritically.
+    how: Solution field length >= 20 characters. Reason openmath_trivial.
+    failure: A retained openmath document has solution shorter than 20 chars.
+
+  length_bounds:
+    kind: hard
+    min_chars: 32
+    max_chars: 200000
+    why: Drops empty, truncated, or binary-ish blobs.
+    how: Character length of normalized text. Reasons too_short / too_long.
+    failure: A retained document is outside [32, 200000] characters.
+
+  contamination:
+    kind: hard
+    token_ngram: 12
+    char_window: 50
+    action: hard_remove
+    refs: [humaneval, mbpp, stage3_eval_v1]
+    why: Benchmark prompts/solutions/tests and the Stage 3 eval corpus must
+      never become training targets.
+    how: Exact 12-token whitespace n-gram or exact 50-char window vs refs.
+      Hits are removed. Unresolved hit is a gate failure.
+    failure: Any contamination hit remains in the retained set.
+
+  license_allowlist:
+    kind: hard
+    values:
+      - apache-2.0
+      - mit
+      - bsd-2-clause
+      - bsd-3-clause
+      - cc-by-4.0
+      - cc-by-sa-4.0
+      - odc-by-1.0
+    why: Unknown or unverifiable licenses are not admitted.
+    how: Source-level claimed license must be on this list after verification.
+      Otherwise the source is BLOCKED (not quietly dropped).
+    failure: An admitted document has a license outside the allowlist.
+
+  max_subsource_share_within_domain:
+    kind: hard
+    value: 0.40
+    applicable_when:
+      available_sources_in_domain: ">= 3"
+    why: Avoids one dataset dominating a domain bucket at full-corpus scale.
+    how: post-pipeline tokens(source) / tokens(domain) <= 0.40.
+    not_applicable_at_10m_unless: "domain has >= 3 available (non-BLOCKED) sources"
+    failure: When applicable, any source exceeds 40% of its domain.
+
+  tokenizer_fingerprint:
+    kind: hard
+    value: "219156db6bbe8c573c0f1654ab9f622c0e8bd51519561ac30d2c13fbf3a01a6e"
+    why: Stage 3 tokenizer is frozen. Stage 4 must not silently swap it.
+    how: Tokenizer.load_frozen().fingerprint must match before canonical tokenize.
+    failure: Any mismatch aborts the run.

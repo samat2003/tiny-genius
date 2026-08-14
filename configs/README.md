@@ -8,6 +8,7 @@ training hyperparameters.
 | `stage0.yaml` | Implemented now | Development / Stage 0 identity and seed |
 | `tiny.yaml` | Implemented (Stage 2) | Debug Tiny Transformer |
 | `tokenizer.yaml` / `tokenizer_candidates.yaml` / `tokenizer_thresholds.yaml` | Implemented (Stage 3) | Tokenizer study + Gate G3 |
+| `data.yaml` / `data_sources.yaml` / `data_thresholds.yaml` | Implemented (Stage 4) | Data pipeline + Gate G4 |
 | `small.yaml` / `medium.yaml` | Planned | Scaling experiments |
 | `model_300m.yaml` | Planned | Architecture freeze candidate |
 | `pretrain.yaml` / `sft.yaml` / `rl.yaml` | Planned | Training-phase recipes |

@@ -52,6 +52,11 @@ normalization, byte fallback, vocab **32768**. See `docs/tokenizer.md`.
 
 The Tiny Transformer is **not** remapped onto this vocabulary yet.
 
+### Stage 4 — Data pipeline (10M milestone)
+
+Deterministic, auditable pipeline under `src/tiny_genius/data/`. See
+`docs/data.md` and `docs/data_contract.md`. Raw shards are not in git.
+
 ## Planned (later stages)
 
 The frozen **target** from the project plan is a ~296.9M decoder-only Transformer

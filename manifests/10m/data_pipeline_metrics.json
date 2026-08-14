@@ -1,0 +1,115 @@
+{
+  "blocked_sources": [
+    "codecontests_plus",
+    "taco",
+    "apps",
+    "code_contest_python3",
+    "tiny_python",
+    "spp_30k_verified",
+    "jina_textbook",
+    "pythonbook",
+    "fineweb_edu_math",
+    "fineweb_edu_physical_sciences",
+    "fineweb_edu_computer_science",
+    "fineweb_edu_life_sciences",
+    "fineweb_edu_engineering",
+    "fineweb_edu_ml_ai"
+  ],
+  "codecontests_solutions_per_problem": {
+    "after": {},
+    "before": {}
+  },
+  "contamination_hits": {
+    "benchmark_refs_missing": [
+      "humaneval.txt",
+      "mbpp.txt"
+    ],
+    "hits": [],
+    "n_hits": 0,
+    "n_refs": 41,
+    "n_unresolved": 0
+  },
+  "exact_duplicate_rate": {
+    "rate": 0.0,
+    "removed": 0,
+    "start": 80
+  },
+  "max_subsource_share": {
+    "math": {
+      "applicable": false,
+      "available_sources": 1,
+      "reason": "fewer than 3 available (non-BLOCKED) sources in this domain",
+      "status": "not_applicable"
+    }
+  },
+  "mixture": {
+    "actual": {
+      "math": 56020,
+      "python": 0,
+      "stem": 0,
+      "total": 56020
+    },
+    "deviation_tokens": {
+      "math": -1483980,
+      "python": -7690000,
+      "stem": -770000
+    },
+    "math_raw_estimate_vs_plan": {
+      "gap": 630000000,
+      "plan_target": 2000000000,
+      "raw_estimate": 2630000000,
+      "resolution": "Down-select only via quality/dedup/contamination and the 10M proportional cap. No silent mixture change to 2.63B."
+    },
+    "notes": "13B domain targets are not-applicable at the 10M milestone. Deviation is versus the proportional 10M split.",
+    "python_raw_estimate": null,
+    "target_10m": {
+      "math": 1540000,
+      "python": 7690000,
+      "stem": 770000,
+      "total": 10000000
+    },
+    "target_13b": {
+      "math": 2000000000,
+      "notes": "Official project-plan target (76.9 / 15.4 / 7.7%). Math raw intake estimate is ~2.63B; the 0.63B gap is closed only by documented down-selection, never by silent mixture drift.\n",
+      "python": 10000000000,
+      "stem": 1000000000
+    }
+  },
+  "near_duplicate_rate": {
+    "rate": 0.0,
+    "removed": 0,
+    "start": 80
+  },
+  "packing": {
+    "n_ctx": 4096,
+    "n_sequences": 15,
+    "n_shards": 1,
+    "packed_tokens": 61440,
+    "pad_tokens": 5420,
+    "shards": [
+      {
+        "n_sequences": 15,
+        "shard_id": "shard-00000"
+      }
+    ],
+    "truncated_docs": 0,
+    "waste_ratio": 0.08821614583333333
+  },
+  "post_pipeline_tokens_per_domain": {
+    "math": 56020,
+    "python": 0,
+    "stem": 0
+  },
+  "post_pipeline_tokens_per_source": {
+    "openmathinstruct_2": 56020
+  },
+  "quality_rejection": {
+    "rate": 0.0,
+    "reason_codes": {},
+    "removed": 0
+  },
+  "raw_token_count_per_source": {
+    "openmathinstruct_2": 55940
+  },
+  "tokenizer_fingerprint": "219156db6bbe8c573c0f1654ab9f622c0e8bd51519561ac30d2c13fbf3a01a6e"
+}

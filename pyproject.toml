@@ -29,6 +29,9 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.6",
 ]
+data = [
+    "datasets>=2.18",
+]
 
 [project.urls]
 Repository = "https://github.com/samat2003/tiny-genius"

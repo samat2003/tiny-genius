@@ -91,4 +91,9 @@ python scripts/verify_tokenizer.py
 ```
 
 Stage 3 freezes the production tokenizer in `tokenizer/` (32,768 tokens).
-The Tiny Transformer still uses its debug vocabulary.
+Stage 4 is the data pipeline (`manifests/10m/` when frozen). The Tiny
+Transformer still uses its debug vocabulary.
+
+```bash
+python scripts/verify_data_manifest.py
+```

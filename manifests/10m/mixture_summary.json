@@ -1,0 +1,33 @@
+{
+  "actual": {
+    "math": 56020,
+    "python": 0,
+    "stem": 0,
+    "total": 56020
+  },
+  "deviation_tokens": {
+    "math": -1483980,
+    "python": -7690000,
+    "stem": -770000
+  },
+  "math_raw_estimate_vs_plan": {
+    "gap": 630000000,
+    "plan_target": 2000000000,
+    "raw_estimate": 2630000000,
+    "resolution": "Down-select only via quality/dedup/contamination and the 10M proportional cap. No silent mixture change to 2.63B."
+  },
+  "notes": "13B domain targets are not-applicable at the 10M milestone. Deviation is versus the proportional 10M split.",
+  "python_raw_estimate": null,
+  "target_10m": {
+    "math": 1540000,
+    "python": 7690000,
+    "stem": 770000,
+    "total": 10000000
+  },
+  "target_13b": {
+    "math": 2000000000,
+    "notes": "Official project-plan target (76.9 / 15.4 / 7.7%). Math raw intake estimate is ~2.63B; the 0.63B gap is closed only by documented down-selection, never by silent mixture drift.\n",
+    "python": 10000000000,
+    "stem": 1000000000
+  }
+}

@@ -1,0 +1,31 @@
+{"source_id": "taco", "text": "def add(a, b):\n    return a + b\n\nassert add(1, 2) == 3\n"}
+{"source_id": "taco", "text": "def add(a, b):\n    return a + b\n\nassert add(1, 2) == 3\n"}
+{"source_id": "taco", "text": "def add(a, b):\n    return a + b\n\nassert add(1, 2) == 3\ndef add(a, b):\n    return a + b\n\nassert add(1, 2) == 3\n"}
+{"source_id": "taco", "text": "def mul(a, b):\n    return a * b\n\nprint(mul(3, 4))\n"}
+{"source_id": "apps", "text": "def greet(name: str) -> str:\n    return f'hello {name}'\n"}
+{"source_id": "apps", "text": "def broken(\n    return 1\n"}
+{"source_id": "openmathinstruct_2", "problem": "What is 2+2?", "generated_solution": "The sum is 4 because 2 plus 2 equals 4."}
+{"source_id": "openmathinstruct_2", "problem": "What is 1+1?", "generated_solution": "x"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 1\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 2\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 3\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 4\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 5\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 6\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 7\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 8\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return 9\n", "problem_id": "p1", "is_correct": true, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "def solve():\n    return -1\n", "problem_id": "p1", "is_correct": false, "language_tag": "python"}
+{"source_id": "codecontests_plus", "text": "int main() { return 0; }", "problem_id": "p2", "is_correct": true, "language_tag": "cpp"}
+{"source_id": "taco", "text": "import os\nimport sys\nfrom typing import Optional, List, Dict, Tuple\nfrom pathlib import Path\nimport numpy as np\n"}
+{"source_id": "fineweb_edu_math", "text": "The Reynolds number Re = rho U L / mu is dimensionless and used in fluid mechanics textbooks worldwide.\n", "score": 1.0}
+{"source_id": "fineweb_edu_physical_sciences", "text": "Newton's second law states that F = m a for a constant-mass particle in an inertial frame.\n", "score": 3.5}
+{"source_id": "fineweb_edu_computer_science", "text": "A hash table maps keys to values in expected constant time using a hash function and buckets.\n", "score": 3.0}
+{"source_id": "fineweb_edu_life_sciences", "text": "Mitochondria generate ATP through oxidative phosphorylation in eukaryotic cells.\n", "score": 3.0}
+{"source_id": "fineweb_edu_engineering", "text": "A simply supported beam under a uniform load has a maximum moment of w L^2 / 8.\n", "score": 3.0}
+{"source_id": "fineweb_edu_ml_ai", "text": "Gradient descent updates parameters in the opposite direction of the loss gradient.\n", "score": 3.0}
+{"source_id": "tiny_python", "text": "print('hello from tiny python fixture')\n"}
+{"source_id": "pythonbook", "text": "Chapter 1. Variables in Python bind names to objects.\n"}
+{"source_id": "jina_textbook", "text": "A textbook paragraph about writing clean Python functions and tests.\n"}
+{"source_id": "spp_30k_verified", "text": "def verified_example(x):\n    return x\n"}
+{"source_id": "code_contest_python3", "text": "def contest_py3():\n    return 0\n"}

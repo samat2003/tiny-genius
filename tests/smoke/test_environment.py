@@ -25,6 +25,8 @@ def test_required_paths_exist() -> None:
         REPO_ROOT / "src" / "tiny_genius" / "__init__.py",
         REPO_ROOT / "configs" / "tiny.yaml",
         REPO_ROOT / "configs" / "tokenizer_thresholds.yaml",
+        REPO_ROOT / "configs" / "data_thresholds.yaml",
+        REPO_ROOT / "configs" / "data_sources.yaml",
         REPO_ROOT / "300M_Dense_Transformer_Full_Project_Plan.md",
     ]
     missing = [str(path) for path in required if not path.exists()]

@@ -39,9 +39,9 @@ artifacts/*
 *.pth
 *.safetensors
 
-# Large datasets
-data/
-datasets/
+# Large datasets (repository root only — not src/**/data/)
+/data/
+/datasets/
 
 # Secrets
 .env

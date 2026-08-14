@@ -37,10 +37,13 @@ def main() -> int:
     )
     tokenizer_dir = REPO_ROOT / "tokenizer" / "FROZEN.json"
     if tokenizer_dir.is_file():
+        from tiny_genius.data.tokenize_stage import EXPECTED_FINGERPRINT
+
         tok = tiny_genius.Tokenizer.load_frozen()
+        assert tok.fingerprint == EXPECTED_FINGERPRINT
         print(
             f"tokenizer: vocab={tok.vocab_size} algorithm={tok.algorithm} "
-            f"version={tok.version}"
+            f"version={tok.version} fingerprint={tok.fingerprint}"
         )
     print("smoke: ok")
     return 0
