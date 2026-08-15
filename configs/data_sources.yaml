@@ -135,11 +135,13 @@ sources:
     claimed_origin: "FineWeb-Edu Mathematics"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
+    identity_status: blocked
     block_reason: >
-      Inspected parquet schema: text,id,dump,url,language,language_score,
-      token_count,score,int_score. No subject/category field. Exclusive
-      Mathematics allocation would invent labels.
+      Official HuggingFaceFW/fineweb-edu (ODC-By-1.0) has 114 configs:
+      default, sample-{10,100,350}BT, and CC-MAIN-* crawls only. Official
+      columns: text,id,dump,url,date,file_path,language,language_score,
+      token_count,score,int_score. score is educational quality, not subject.
+      No Mathematics partition. See docs/fineweb_edu_stem_probe.md.
 
   - source_id: fineweb_edu_physical_sciences
     domain: stem
@@ -147,8 +149,11 @@ sources:
     claimed_origin: "FineWeb-Edu Curated / Physical Sciences"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
-    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
+    identity_status: blocked
+    block_reason: >
+      Official FineWeb-Edu has no subject/category field and no STEM-bucket
+      configs. Exclusive Physical Sciences allocation would invent labels.
+      Outcome B. See docs/fineweb_edu_stem_probe.md.
 
   - source_id: fineweb_edu_computer_science
     domain: stem
@@ -156,8 +161,8 @@ sources:
     claimed_origin: "FineWeb-Edu Curated / Computer Science"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
-    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
+    identity_status: blocked
+    block_reason: Same official FineWeb-Edu schema — no exclusive CS labels.
 
   - source_id: fineweb_edu_life_sciences
     domain: stem
@@ -165,8 +170,8 @@ sources:
     claimed_origin: "FineWeb-Edu Curated / Life Sciences"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
-    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
+    identity_status: blocked
+    block_reason: Same official FineWeb-Edu schema — no exclusive Life Sciences labels.
 
   - source_id: fineweb_edu_engineering
     domain: stem
@@ -174,8 +179,8 @@ sources:
     claimed_origin: "FineWeb-Edu Curated / Engineering/Technology"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
-    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
+    identity_status: blocked
+    block_reason: Same official FineWeb-Edu schema — no exclusive Eng/Tech labels.
 
   - source_id: fineweb_edu_ml_ai
     domain: stem
@@ -183,8 +188,8 @@ sources:
     claimed_origin: "FineWeb-Edu Curated / ML/AI"
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
-    identity_status: unresolved
-    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
+    identity_status: blocked
+    block_reason: Same official FineWeb-Edu schema — no exclusive ML/AI labels.
 
 math_raw_estimate_tokens: 2_630_000_000
 math_plan_target_tokens: 2_000_000_000

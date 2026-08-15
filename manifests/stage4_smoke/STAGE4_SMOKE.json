@@ -1,0 +1,23 @@
+{
+  "audit_dir": "manifests/10m",
+  "audit_sha256": {
+    "contamination_report.json": "eb695553a6a3337e36d4eb3f7ec14d4bfacac7c2103d496f41344de4620190a6",
+    "data_manifest.jsonl": "98a4effe0fa70fefd13307b96b688332fa946869e90ade755ab1313c75e1b63e",
+    "data_pipeline_metrics.json": "88db59da29046dd02a6d8e4b0b9d24ba3982556efafba8f34195b1def22d6dec",
+    "dedup_manifest.jsonl": "5354df3e969a340ff39dd57d847418e58b05608568a75c7688ef29fb0abddb7b",
+    "mixture_summary.json": "b21a56ad1c685071993672b64712df93a80ce0ab88d54762bd0ae6f14c1ac069"
+  },
+  "corpus_hash": "e671168c1298ed975549458360d03737a59bd36db86211ae7360af38adef772a",
+  "frozen_10m_json": false,
+  "gate_g4": "FAIL",
+  "gate_g4_reason": "The exact 10M milestone is not frozen because STEM=0 and the corpus contains 9,229,818 tokens. STAGE4_SMOKE is an engineering validation corpus only.",
+  "identity": "STAGE4_SMOKE",
+  "is_10m_milestone": false,
+  "math_tokens": 1539907,
+  "notes": "Preserved Stage 4 Python/Math audit after exclusive-STEM Outcome B. Not a production pre-training corpus. Do not call this 10M.",
+  "python_tokens": 7689911,
+  "seed": 42,
+  "stem_tokens": 0,
+  "tokenizer_fingerprint": "219156db6bbe8c573c0f1654ab9f622c0e8bd51519561ac30d2c13fbf3a01a6e",
+  "total_tokens": 9229818
+}

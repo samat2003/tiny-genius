@@ -11,8 +11,11 @@ A real file-based run (not an 80-problem probe) produced:
 | STEM | 770,000 | 0 |
 | **Total** | **10,000,000** | **9,229,818** |
 
-Python and math hit the proportional caps. STEM is 0 because FineWeb-Edu parquet has
-**no subject/category field**; exclusive bucket allocation would invent labels.
+Python and math hit the proportional caps. STEM is 0 after the official
+FineWeb-Edu probe (`docs/fineweb_edu_stem_probe.md`): 114 configs are
+default / samples / CC-MAIN dumps only; parquet columns have educational
+`score`/`int_score` and no subject labels. **Outcome B** — no exclusive
+STEM allocation from the approved source. Gate G4 FAIL.
 
 Retained Python tokens after mixture cap are all from CodeContests+ (`py3` correct).
 DeepMind / TACO / APPS were ingested from published parquet/JSONL and then removed
@@ -22,3 +25,6 @@ Contamination: 368 hits against local HumanEval + MBPP + stage3-eval-v1; all
 **removed**; `n_unresolved = 0`. Refs live in gitignored `data/contamination_refs/`.
 
 Do not treat this directory as a frozen 10M training corpus.
+
+The same audit is labeled **STAGE4_SMOKE** in
+`manifests/stage4_smoke/STAGE4_SMOKE.json` for GPU training-path smoke only.
