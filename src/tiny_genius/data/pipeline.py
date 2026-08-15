@@ -10,6 +10,7 @@ from tiny_genius.config import REPO_ROOT, load_yaml
 from tiny_genius.data.contamination import scan_contamination
 from tiny_genius.data.contract import validate_source_record
 from tiny_genius.data.dedup import apply_problem_cap, exact_dedup, near_dedup
+from tiny_genius.data.highsignal import apply_highsignal, load_highsignal_config
 from tiny_genius.data.ingest import (
     expand_source_rows,
     extract_text_from_hf_row,
@@ -119,6 +120,7 @@ def run_stages(
         permutations=int(near_cfg["permutations"]),
     )
     quality_kept, quality_rejected = apply_quality(near_kept, thresholds)
+    hs_cfg = load_highsignal_config()
     clean, hits, contam_report = scan_contamination(
         quality_kept,
         thresholds=thresholds,
@@ -127,17 +129,18 @@ def run_stages(
     )
     for doc in clean:
         doc["contamination_risk"] = "clear"
+    signal_kept, signal_rejected = apply_highsignal(clean, hs_cfg)
     packed_stats: dict[str, Any] = {}
     tokenized: list[dict[str, Any]] = []
     if tokenize:
-        tokenized = canonical_tokenize(clean, tok)
+        tokenized = canonical_tokenize(signal_kept, tok)
         _, packed_stats = pack_documents(
             tokenized,
             n_ctx=int(data_cfg["n_ctx"]),
             shard_target_tokens=int(data_cfg["shard_target_tokens"]),
         )
     else:
-        tokenized = clean
+        tokenized = signal_kept
 
     return {
         "docs": tokenized,
@@ -147,11 +150,13 @@ def run_stages(
             "exact_dedup": exact_removed,
             "near_dedup": near_removed,
             "quality": quality_rejected,
+            "highsignal": signal_rejected,
             "contamination": hits,
         },
         "contamination_report": contam_report,
         "packing": packed_stats,
         "tokenizer_fingerprint": tok.fingerprint,
+        "highsignal_version": hs_cfg.get("version"),
         "environment": collect_environment(seed=int(data_cfg["seed"])),
     }
 
@@ -224,20 +229,21 @@ def write_milestone_artifacts(
     write_sha256sums(dest, names)
     if not freeze:
         return
-    frozen = dest / "FROZEN_10M.json"
+    frozen = dest / "FROZEN_PRETRAIN.json"
     if frozen.is_file():
-        raise RuntimeError(f"milestone already frozen: {frozen}")
+        raise RuntimeError(f"already frozen: {frozen}")
     write_json(
         frozen,
         {
             "frozen": True,
             "stage": 4,
-            "milestone": "10m",
+            "milestone": "highsignal_pretrain",
             "tokenizer_fingerprint": result["tokenizer_fingerprint"],
             "manifest_hash": fingerprint(
                 (dest / "data_manifest.jsonl").read_text(encoding="utf-8")
             ),
             "thresholds_version": thresholds["version"],
+            "highsignal_version": result.get("highsignal_version"),
             "seed": data_cfg["seed"],
             "actual_tokens": metrics["mixture"]["actual"]["total"],
         },

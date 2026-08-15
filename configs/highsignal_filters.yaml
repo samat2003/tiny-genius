@@ -1,0 +1,74 @@
+# High-signal content bar (Stage 4). Committed before any scale run.
+# Deterministic rubric implementation — not a live unpinned LLM call.
+# Version must not be retuned after seeing the real-build metrics.
+
+name: highsignal
+version: 1
+stage: 4
+backend: deterministic_rubric
+why: >
+  Phi-1-style curation at 300M: quality dominates volume. A live LLM scorer
+  is not used because it would make the manifest hash unreproducible unless
+  every score were pinned. This file is the pinned rubric.
+
+score_min: 3.0
+score_max: 5.0
+language: python_and_english
+
+stdin_stdout_policy: >
+  Competitive-programming input()/print()/sys.stdin is KEEP, not I/O garbage.
+
+non_english_comments: exclude_document
+other_programming_languages: exclude_document
+
+hard_reject_patterns:
+  utility_io:
+    - "open("
+    - "pathlib"
+    - "os.path"
+    - "os.remove"
+    - "shutil"
+    - "requests."
+    - "urllib"
+    - "beautifulsoup"
+    - "selenium"
+    - "flask"
+    - "django"
+    - "tkinter"
+    - "pygame"
+    - "argparse"
+    - "subprocess"
+    - "socket.socket"
+    - "pdf"
+  tutorial_prose:
+    - "how to use"
+    - "this chapter"
+    - "pip install"
+    - "getting started with"
+    - "in this tutorial"
+
+keep_cp_io:
+  - "input("
+  - "sys.stdin"
+  - "print("
+
+trivial:
+  max_nonempty_lines: 4
+  require_control_flow_or_problem: true
+
+math:
+  min_solution_chars: 20
+
+stem:
+  require_reasoning_dense: true
+  reject_general_prose_without_algorithm_or_math: true
+
+rubric:
+  - id: teaches_clear_concept
+    weight: 1.0
+  - id: self_contained
+    weight: 1.0
+  - id: not_excluded_category
+    weight: 1.0
+  - id: non_trivial_code
+    weight: 1.0

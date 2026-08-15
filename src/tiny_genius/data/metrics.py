@@ -28,6 +28,11 @@ def build_metrics(
     for row in removed["quality"]:
         for code in row.get("reason_codes") or []:
             quality_reasons[code] += 1
+    signal_n = len(removed.get("highsignal") or [])
+    signal_reasons: Counter[str] = Counter()
+    for row in removed.get("highsignal") or []:
+        for code in row.get("reason_codes") or []:
+            signal_reasons[code] += 1
 
     by_source_raw: dict[str, int] = {}
     for doc in input_docs:
@@ -66,8 +71,8 @@ def build_metrics(
         },
         "python_raw_estimate": registry.get("python_raw_estimate_tokens"),
         "notes": (
-            "13B domain targets are not-applicable at the 10M milestone. "
-            "Deviation is versus the proportional 10M split."
+            "10M ceremony abandoned. Deviation vs historical 10M split is "
+            "informational. 13B is a ceiling, not a pad target."
         ),
     }
 
@@ -112,6 +117,11 @@ def build_metrics(
             "removed": quality_n,
             "reason_codes": dict(quality_reasons),
             "rate": _rate(quality_n, start_n),
+        },
+        "highsignal_rejection": {
+            "removed": signal_n,
+            "reason_codes": dict(signal_reasons),
+            "rate": _rate(signal_n, start_n),
         },
         "contamination_hits": result["contamination_report"],
         "post_pipeline_tokens_per_source": by_source_post,

@@ -30,13 +30,11 @@ contribute 0 and stay BLOCKED.
 ## Re-run
 
 ```bash
-python scripts/run_data_pipeline.py --milestone 10m
-python scripts/verify_data_manifest.py
+python scripts/run_data_pipeline.py --output manifests/pretrain
 ```
 
-`FROZEN_10M.json` is written only when the 10M token target is actually met
-and then refuses in-place overwrite. The 10M sample is **not frozen**. The
-existing 9,229,818-token audit is labeled `STAGE4_SMOKE`
+`FROZEN_10M.json` is not used. Freeze only with `--freeze` → `FROZEN_PRETRAIN.json`.
+The 9,229,818-token audit is labeled `STAGE4_SMOKE`
 (`manifests/stage4_smoke/STAGE4_SMOKE.json`) for engineering-path validation
 only. Python KEEP is CodeContests+ (`py3` only);
 see `docs/python_dataset_selection.md`. STEM allocation is **Outcome B**

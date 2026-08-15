@@ -4,7 +4,11 @@
 # These values are fixed constraints, not search knobs.
 
 stage: 4
-version: 1
+version: 2
+# v2: 10M/100M/1B ceremony abandoned. highsignal v1 is the new content bar.
+# Existing numeric filters below are unchanged (not retuned after metrics).
+highsignal_config: configs/highsignal_filters.yaml
+highsignal_version: 1
 
 mixture_13b_target:
   python: 10_000_000_000
@@ -21,8 +25,8 @@ mixture_10m_target:
   stem: 770_000
   total: 10_000_000
   notes: >
-    Proportional 10M milestone only. The 13B domain counts are not-applicable
-    at this scale.
+    Historical 10M split only. Formal 10M/100M/1B gates are abandoned.
+    Do not auto-freeze FROZEN_10M.json. 13B is a ceiling, not a pad target.
 
 thresholds:
   codecontests_max_solutions_per_problem:

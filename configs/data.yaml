@@ -2,7 +2,7 @@
 
 name: data-pipeline
 stage: 4
-milestone: 10m
+milestone: highsignal_pretrain
 seed: 42
 n_ctx: 4096
 shard_target_tokens: 1_000_000

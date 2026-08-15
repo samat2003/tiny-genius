@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Run the Stage 4 data pipeline for the authorized 10M milestone."""
+"""Run the Stage 4 high-signal pretrain pipeline.
+
+Does not auto-create FROZEN_10M.json. Use --freeze only after an honest build.
+13B is a ceiling, not a pad target.
+"""
 
 from __future__ import annotations
 
@@ -31,12 +35,24 @@ def load_fixture_rows(path: Path) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--milestone", default="10m", choices=["10m"])
-    parser.add_argument("--output", type=Path, default=REPO_ROOT / "manifests" / "10m")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=REPO_ROOT / "manifests" / "pretrain",
+    )
     parser.add_argument("--fixture", type=Path, default=None)
-    parser.add_argument("--max-rows-per-source", type=int, default=4000)
     parser.add_argument("--max-docs-per-source", type=int, default=25000)
     parser.add_argument("--no-tokenize", action="store_true")
+    parser.add_argument(
+        "--freeze",
+        action="store_true",
+        help="Write FROZEN_PRETRAIN.json (not FROZEN_10M.json)",
+    )
+    parser.add_argument(
+        "--apply-13b-ceiling",
+        action="store_true",
+        help="Down-select only if tokens would exceed the 13B plan ceiling",
+    )
     args = parser.parse_args()
 
     thresholds, data_cfg, registry = load_pipeline_config()
@@ -79,12 +95,13 @@ def main() -> int:
         refs_dir=REPO_ROOT / data_cfg["contamination_refs_dir"],
         tokenize=not args.no_tokenize,
     )
-    targets = {
-        "python": int(thresholds["mixture_10m_target"]["python"]),
-        "math": int(thresholds["mixture_10m_target"]["math"]),
-        "stem": int(thresholds["mixture_10m_target"]["stem"]),
-    }
-    result["docs"] = apply_mixture_cap(result["docs"], targets)
+    if args.apply_13b_ceiling:
+        ceiling = {
+            "python": int(thresholds["mixture_13b_target"]["python"]),
+            "math": int(thresholds["mixture_13b_target"]["math"]),
+            "stem": int(thresholds["mixture_13b_target"]["stem"]),
+        }
+        result["docs"] = apply_mixture_cap(result["docs"], ceiling)
     metrics = build_metrics(
         inventory=inventory,
         input_docs=docs,
@@ -94,10 +111,6 @@ def main() -> int:
     )
     for rec in inventory:
         rec["token_count"] = metrics["post_pipeline_tokens_per_source"].get(rec["source_id"], 0)
-        rec["normalized_hash"] = rec.get("normalized_hash")
-        rec["raw_hash"] = rec.get("raw_hash")
-    actual = int(metrics["mixture"]["actual"]["total"])
-    reached = actual >= int(thresholds["mixture_10m_target"]["total"])
     write_milestone_artifacts(
         args.output,
         inventory=inventory,
@@ -105,21 +118,24 @@ def main() -> int:
         metrics=metrics,
         thresholds=thresholds,
         data_cfg=data_cfg,
-        freeze=reached,
+        freeze=args.freeze,
     )
+    actual = int(metrics["mixture"]["actual"]["total"])
     print(
         json.dumps(
             {
                 "kept_docs": len(result["docs"]),
                 "actual_tokens": metrics["mixture"]["actual"],
+                "highsignal": metrics.get("highsignal_rejection"),
                 "blocked": metrics["blocked_sources"],
-                "frozen": reached,
+                "frozen": args.freeze,
                 "output": str(args.output),
+                "total": actual,
             },
             indent=2,
         )
     )
-    return 0 if reached else 2
+    return 0
 
 
 if __name__ == "__main__":

@@ -124,8 +124,8 @@ def test_tokenizer_fingerprint_unchanged() -> None:
 def test_unresolved_source_is_blocked() -> None:
     thresholds, _, registry = load_pipeline_config()
     allow = load_allowlist(thresholds)
-    tiny = next(s for s in registry["sources"] if s["source_id"] == "tiny_python")
-    status, reason = license_decision(tiny, allow)
+    book = next(s for s in registry["sources"] if s["source_id"] == "pythonbook")
+    status, reason = license_decision(book, allow)
     assert status == "blocked"
     assert reason
     taco = next(s for s in registry["sources"] if s["source_id"] == "taco")

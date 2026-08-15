@@ -126,6 +126,28 @@ def extract_text_from_hf_row(source_id: str, row: dict[str, Any]) -> tuple[str, 
         extra["solution"] = solution
         extra["is_correct"] = True
         return f"{problem}\n\n{solution}", extra
+    if source_id in {"jina_textbook", "tiny_python", "spp_30k_verified"}:
+        problem = str(
+            row.get("prompt")
+            or row.get("instruction")
+            or row.get("problem")
+            or row.get("text")
+            or ""
+        )
+        solution = str(
+            row.get("canonical_solution")
+            or row.get("output")
+            or row.get("solution")
+            or row.get("code")
+            or ""
+        )
+        extra["solution"] = solution
+        extra["is_correct"] = True
+        extra["language_tag"] = "python"
+        extra["problem_id"] = str(row.get("task_id") or row.get("id") or "")
+        if solution and problem:
+            return f"{problem}\n\n# solution\n{solution}\n", extra
+        return problem or solution, extra
     # Generic fallback for fixtures only.
     text = str(row.get("text") or "")
     keys = ("problem_id", "is_correct", "language_tag", "solution")
