@@ -133,6 +133,83 @@ def extract_text_from_hf_row(source_id: str, row: dict[str, Any]) -> tuple[str, 
     return text, extra
 
 
+def _parse_solution_list(raw: Any) -> list[str]:
+    if raw is None:
+        return []
+    if isinstance(raw, list):
+        return [str(item) for item in raw if item]
+    if isinstance(raw, str):
+        text = raw.strip()
+        if not text or text == "[]":
+            return []
+        try:
+            import json
+
+            parsed = json.loads(text)
+        except json.JSONDecodeError:
+            return [raw]
+        if isinstance(parsed, list):
+            return [str(item) for item in parsed if item]
+        return [str(parsed)]
+    return []
+
+
+def expand_deepmind_row(row: dict[str, Any], *, cap: int = 8) -> list[dict[str, Any]]:
+    title = str(row.get("name") or "")
+    desc = str(row.get("description") or "")
+    pid = title or str(row.get("cf_contest_id") or "")
+    sols = row.get("solutions") or {}
+    languages = sols.get("language") or []
+    codes = sols.get("solution") or []
+    out: list[dict[str, Any]] = []
+    for lang, code in zip(languages, codes):
+        # 3 == PYTHON3 in the CodeContests schema.
+        if int(lang) != 3:
+            continue
+        text = f"# {title}\n\n{desc}\n\n# solution\n{code}\n"
+        out.append(
+            {
+                "text": text,
+                "problem_id": f"dm:{pid}",
+                "is_correct": True,
+                "language_tag": "python",
+                "solution": str(code),
+            }
+        )
+        if len(out) >= cap:
+            break
+    return out
+
+
+def expand_solution_list_row(
+    row: dict[str, Any],
+    *,
+    source_id: str,
+    cap: int = 8,
+) -> list[dict[str, Any]]:
+    question = str(row.get("question") or row.get("description") or "")
+    pid = str(row.get("url") or row.get("id") or row.get("name") or "")
+    out: list[dict[str, Any]] = []
+    for code in _parse_solution_list(row.get("solutions")):
+        if not looks_python3(code, "py3") and (
+            "#include" in code[:200] or "using namespace" in code[:200]
+        ):
+            continue
+        text = f"{question}\n\n# solution\n{code}\n"
+        out.append(
+            {
+                "text": text,
+                "problem_id": f"{source_id}:{pid}",
+                "is_correct": True,
+                "language_tag": "python",
+                "solution": code,
+            }
+        )
+        if len(out) >= cap:
+            break
+    return out
+
+
 def expand_source_rows(
     source_id: str, rows: list[dict[str, Any]], *, cap: int = 8
 ) -> list[dict[str, Any]]:
@@ -142,5 +219,15 @@ def expand_source_rows(
             payload = dict(row)
             if payload.get("correct_submissions") is not None:
                 expanded.extend(expand_contest_row(payload, cap=cap))
+        return expanded
+    if source_id == "deepmind_code_contests":
+        expanded = []
+        for row in rows:
+            expanded.extend(expand_deepmind_row(dict(row), cap=cap))
+        return expanded
+    if source_id in {"taco", "apps"}:
+        expanded = []
+        for row in rows:
+            expanded.extend(expand_solution_list_row(dict(row), source_id=source_id, cap=cap))
         return expanded
     return rows

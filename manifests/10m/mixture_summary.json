@@ -1,13 +1,13 @@
 {
   "actual": {
-    "math": 56020,
-    "python": 457196,
+    "math": 1539907,
+    "python": 7689911,
     "stem": 0,
-    "total": 513216
+    "total": 9229818
   },
   "deviation_tokens": {
-    "math": -1483980,
-    "python": -7232804,
+    "math": -93,
+    "python": -89,
     "stem": -770000
   },
   "math_raw_estimate_vs_plan": {

@@ -290,27 +290,47 @@ def docs_from_rows(
     return docs
 
 
-def try_stream_hf(source: dict[str, Any], max_rows: int) -> tuple[list[dict[str, Any]], str | None]:
+def collect_source_docs(
+    source: dict[str, Any],
+    collection_date: str,
+    *,
+    cap: int,
+    max_docs: int,
+) -> tuple[list[dict[str, Any]], str | None]:
+    """Expand published files incrementally so huge submission lists are not retained."""
+    from tiny_genius.data.hf_fetch import iter_source_raw_rows
+
+    if source.get("decision") == "reject":
+        return [], source.get("block_reason") or "rejected"
     if source.get("identity_status") != "verified" or not source.get("hf_id"):
         return [], source.get("block_reason") or "not fetchable"
+    docs: list[dict[str, Any]] = []
     try:
-        from datasets import load_dataset
-    except ImportError:
-        return [], "huggingface datasets library not installed"
-    try:
-        kwargs: dict[str, Any] = {"split": "train", "streaming": True}
-        if source.get("hf_config"):
-            kwargs["name"] = source["hf_config"]
-        ds = load_dataset(source["hf_id"], **kwargs)
-    except Exception as exc:  # noqa: BLE001 — must record BLOCKED reason
-        return [], f"fetch failed: {exc}"
-    rows: list[dict[str, Any]] = []
-    try:
-        for index, row in enumerate(ds):
-            rows.append(dict(row))
-            if index + 1 >= max_rows:
-                break
+        for row_index, row in enumerate(iter_source_raw_rows(source)):
+            expanded = expand_source_rows(source["source_id"], [dict(row)], cap=cap)
+            for item_index, item in enumerate(expanded):
+                text, extra = extract_text_from_hf_row(source["source_id"], item)
+                if not text:
+                    continue
+                doc = make_document(
+                    doc_id=f"{source['source_id']}:{row_index:06d}:{item_index:02d}",
+                    source=source,
+                    text=text,
+                    collection_date=collection_date,
+                    extra=extra,
+                )
+                if not doc:
+                    continue
+                docs.append(doc)
+                if len(docs) >= max_docs:
+                    return docs, None
     except Exception as exc:  # noqa: BLE001
-        if not rows:
-            return [], f"stream failed: {exc}"
-    return rows, None
+        if not docs:
+            return [], f"fetch failed: {exc}"
+    return docs, None
+
+
+def try_stream_hf(source: dict[str, Any], max_rows: int) -> tuple[list[dict[str, Any]], str | None]:
+    from tiny_genius.data.hf_fetch import fetch_source_rows
+
+    return fetch_source_rows(source, max_rows)

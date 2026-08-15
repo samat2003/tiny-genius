@@ -130,7 +130,7 @@ def test_unresolved_source_is_blocked() -> None:
     assert reason
     taco = next(s for s in registry["sources"] if s["source_id"] == "taco")
     status2, _ = license_decision(taco, allow)
-    assert status2 == "blocked"
+    assert status2 == "admitted"
     ccp = next(s for s in registry["sources"] if s["source_id"] == "codecontests_plus")
     status3, _ = license_decision(ccp, allow)
     assert status3 == "admitted"

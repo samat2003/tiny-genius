@@ -1,5 +1,5 @@
-# Stage 4 source registry after evidence-based Python selection (2026-08-14).
-# Math/STEM entries are unchanged from the prior authorized list.
+# Stage 4 source registry after file-based inspection (2026-08-14).
+# Math/STEM identities unchanged except FineWeb metadata notes.
 
 sources:
   - source_id: codecontests_plus
@@ -9,11 +9,22 @@ sources:
     claimed_license: cc-by-4.0
     identity_status: verified
     hf_id: ByteDance-Seed/Code-Contests-Plus
-    hf_config: default
+    hf_revision: 96c850540fad
+    access_method: huggingface_hub parquet root parts (default, no extra tests)
+    hf_files:
+      - part-00000-of-00010.parquet
+      - part-00001-of-00010.parquet
+      - part-00002-of-00010.parquet
+      - part-00003-of-00010.parquet
+      - part-00004-of-00010.parquet
+      - part-00005-of-00010.parquet
+      - part-00006-of-00010.parquet
+      - part-00007-of-00010.parquet
+      - part-00008-of-00010.parquet
+      - part-00009-of-00010.parquet
+    hf_columns: [source, id, title, description, correct_submissions]
     role: python_backbone
-    notes: >
-      KEEP. CC-BY-4.0. Use only language=py3 correct_submissions plus the English
-      problem statement. Drop incorrect, non-py3, generators, validators, checkers.
+    notes: "KEEP. py3 correct only. CC-BY-4.0 card; contest sites are upstream."
 
   - source_id: deepmind_code_contests
     domain: python
@@ -22,36 +33,46 @@ sources:
     claimed_license: cc-by-4.0
     identity_status: verified
     hf_id: deepmind/code_contests
-    decision: reject
-    identity_status_note: verified but rejected
-    block_reason: >
-      REJECT. CodeContests+ is built upon this dump. Using both would double-count
-      the same contest problems. Remaining unique Python2 solutions are not wanted.
+    hf_revision: 802411c3010c
+    access_method: huggingface_hub parquet data/train-*.parquet
+    hf_files:
+      - data/train-00000-of-00039-e991a271dbfa9925.parquet
+      - data/train-00001-of-00039-e092fe56fda18715.parquet
+      - data/train-00002-of-00039-9cea23812e920e41.parquet
+      - data/train-00003-of-00039-e3822fccad6e083a.parquet
+      - data/train-00004-of-00039-cefe355b4667b27e.parquet
+    hf_columns: [name, description, solutions, source, difficulty]
+    notes: >
+      KEEP as authorized replacement for iamtarun/code_contest_python3_alpaca.
+      PYTHON3 (language==3) from solutions only. Global dedup vs CodeContests+.
 
   - source_id: taco
     domain: python
-    claimed_origin: "BAAI/TACO"
+    claimed_origin: "BAAI/TACO ALL parquet"
     claimed_url: "https://huggingface.co/datasets/BAAI/TACO"
     claimed_license: apache-2.0
     identity_status: verified
     hf_id: BAAI/TACO
-    decision: reject
-    block_reason: >
-      REJECT this pass. License apache-2.0 is fine, but current huggingface
-      `datasets` cannot load TACO.py dataset scripts, so the source is not
-      fetchable. Not substituted.
+    hf_revision: d593ed0a2bec
+    access_method: huggingface_hub ALL/train-*.parquet (not TACO.py)
+    hf_files:
+      - ALL/train-00000-of-00009.parquet
+      - ALL/train-00001-of-00009.parquet
+      - ALL/train-00002-of-00009.parquet
+    notes: KEEP unique Python solutions after global dedup. Overlaps CF/APPS.
 
   - source_id: apps
     domain: python
-    claimed_origin: "codeparrot/apps (Hendrycks APPS)"
+    claimed_origin: "codeparrot/apps train.jsonl"
     claimed_url: "https://huggingface.co/datasets/codeparrot/apps"
     claimed_license: mit
     identity_status: verified
     hf_id: codeparrot/apps
-    decision: reject
-    block_reason: >
-      REJECT. Standard code-generation benchmark with imperfect tests; same
-      dataset-script load failure as TACO; overlap with contest dumps.
+    hf_revision: 21e74ddf8de1
+    access_method: huggingface_hub train.jsonl (not apps.py)
+    hf_files:
+      - train.jsonl
+    notes: KEEP train split only after contamination + global dedup. Not test.jsonl.
 
   - source_id: tiny_python
     domain: python
@@ -62,33 +83,32 @@ sources:
     hf_id: BertilBraun/TinyPython
     decision: reject
     block_reason: >
-      REJECT. Fully synthetic (Qwen/Phi teacher models). Inspection shows
-      repetitive template families (find-first-below-threshold, etc.), not
-      competitive programming. License not relied upon because quality fails.
+      REJECT. Inspected data/qwen25_coder_7b_small.jsonl-equivalent rows: teacher
+      Qwen/Phi template families, not competitive programming.
 
   - source_id: spp_30k_verified
     domain: python
-    claimed_origin: "wuyetao/spp (CodeGeeX synthetic; SPP_30k_verified mentioned in card)"
+    claimed_origin: "wuyetao/spp SPP_30k_verified.jsonl"
     claimed_url: "https://huggingface.co/datasets/wuyetao/spp"
     claimed_license: null
     identity_status: verified
     hf_id: wuyetao/spp
     decision: reject
     block_reason: >
-      REJECT. Systematic garbage: doctests contradict implementations
-      (nearest_integer, is_Power_Of_Four, find_smallest_element, ...).
+      REJECT. Direct file SPP_30k_verified.jsonl exists and first 80 samples
+      parse, but they are toy synthetic functions (sort/palindrome/multiply),
+      not the desired contest/algorithm corpus. Unverified sibling file is worse.
 
   - source_id: jina_textbook
     domain: python
-    claimed_origin: "jina-ai/textbook (ChatGPT-3.5 HumanEval-style exercises)"
+    claimed_origin: "jina-ai/textbook"
     claimed_url: "https://github.com/jina-ai/textbook"
     claimed_license: null
     identity_status: verified
     decision: reject
     block_reason: >
-      REJECT. Explicitly HumanEval-format synthetic exercises generated by
-      ChatGPT 3.5. High contamination risk. HF dump jinaai/code_exercises_40k
-      is not accessible.
+      REJECT. README: ChatGPT-3.5 HumanEval-format exercises. Hub dump
+      jinaai/code_exercises_40k does not exist.
 
   - source_id: pythonbook
     domain: python
@@ -99,8 +119,7 @@ sources:
     hf_id: AdapterOcean/pythonbook-standardized_unified
     decision: reject
     block_reason: >
-      REJECT as backbone. 2,574 tutorial chunks from Automate the Boring Stuff
-      (PDF/I/O/dicts). Dominated by OS/file I/O prose, not algorithms.
+      REJECT. Inspected parquet: Automate the Boring Stuff PDF/os/dict tutorials.
 
   - source_id: openmathinstruct_2
     domain: math
@@ -109,7 +128,7 @@ sources:
     claimed_license: cc-by-4.0
     identity_status: verified
     hf_id: nvidia/OpenMathInstruct-2
-    notes: "Unchanged math source. Problem-solving/reasoning, not exposition."
+    notes: Unchanged math source.
 
   - source_id: fineweb_edu_math
     domain: math
@@ -118,7 +137,9 @@ sources:
     claimed_license: odc-by-1.0
     identity_status: unresolved
     block_reason: >
-      Unchanged. No official exclusive Mathematics split was bound.
+      Inspected parquet schema: text,id,dump,url,language,language_score,
+      token_count,score,int_score. No subject/category field. Exclusive
+      Mathematics allocation would invent labels.
 
   - source_id: fineweb_edu_physical_sciences
     domain: stem
@@ -127,7 +148,7 @@ sources:
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
     identity_status: unresolved
-    block_reason: Unchanged. No official exclusive curated dump was bound.
+    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
 
   - source_id: fineweb_edu_computer_science
     domain: stem
@@ -136,7 +157,7 @@ sources:
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
     identity_status: unresolved
-    block_reason: Unchanged. No official exclusive curated dump was bound.
+    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
 
   - source_id: fineweb_edu_life_sciences
     domain: stem
@@ -145,7 +166,7 @@ sources:
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
     identity_status: unresolved
-    block_reason: Unchanged. No official exclusive curated dump was bound.
+    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
 
   - source_id: fineweb_edu_engineering
     domain: stem
@@ -154,7 +175,7 @@ sources:
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
     identity_status: unresolved
-    block_reason: Unchanged. No official exclusive curated dump was bound.
+    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
 
   - source_id: fineweb_edu_ml_ai
     domain: stem
@@ -163,20 +184,12 @@ sources:
     claimed_url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu"
     claimed_license: odc-by-1.0
     identity_status: unresolved
-    block_reason: Unchanged. No official exclusive curated dump was bound.
+    block_reason: Same FineWeb-Edu schema — no subject labels to allocate exclusively.
 
 math_raw_estimate_tokens: 2_630_000_000
 math_plan_target_tokens: 2_000_000_000
 stem_raw_estimate_tokens: 1_000_000_000
 python_raw_estimate_tokens: null
 python_selection_date: "2026-08-14"
-python_kept:
-  - codecontests_plus
-python_rejected:
-  - deepmind_code_contests
-  - taco
-  - apps
-  - tiny_python
-  - spp_30k_verified
-  - jina_textbook
-  - pythonbook
+python_kept: [codecontests_plus, deepmind_code_contests, taco, apps]
+python_rejected: [tiny_python, spp_30k_verified, jina_textbook, pythonbook]

@@ -14,18 +14,22 @@ def char_shingles(text: str, n: int = 5) -> set[str]:
 
 
 def minhash_signature(text: str, permutations: int = 128, shingle_n: int = 5) -> tuple[bytes, ...]:
+    """Deterministic 64-bit MinHash. Same 128-perm / 0.8 cutoff contract."""
     grams = char_shingles(text, shingle_n)
     if not grams:
-        return tuple(b"\x00" * 32 for _ in range(permutations))
+        return tuple(b"\x00" * 8 for _ in range(permutations))
+    bases = [
+        int.from_bytes(hashlib.sha256(gram.encode("utf-8")).digest()[:8], "little")
+        for gram in grams
+    ]
     sig: list[bytes] = []
+    mask = (1 << 64) - 1
     for index in range(permutations):
-        best: bytes | None = None
-        prefix = f"{index}:".encode()
-        for gram in grams:
-            digest = hashlib.sha256(prefix + gram.encode("utf-8")).digest()
-            if best is None or digest < best:
-                best = digest
-        sig.append(best or b"\x00" * 32)
+        seed = hashlib.sha256(f"mh:{index}".encode()).digest()
+        add = int.from_bytes(seed[:8], "little")
+        mul = int.from_bytes(seed[8:16], "little") | 1
+        best = min((mul * value + add) & mask for value in bases)
+        sig.append(best.to_bytes(8, "little"))
     return tuple(sig)
 
 
@@ -58,21 +62,40 @@ def exact_dedup(docs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[
     return kept, removed
 
 
+def _band_keys(sig: tuple[bytes, ...], band_size: int = 4) -> list[bytes]:
+    keys: list[bytes] = []
+    for start in range(0, len(sig), band_size):
+        keys.append(b"".join(sig[start : start + band_size]))
+    return keys
+
+
 def near_dedup(
     docs: list[dict[str, Any]],
     *,
     cutoff: float = 0.8,
     permutations: int = 128,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """MinHash Jaccard >= cutoff. LSH bands only propose candidates; cutoff is unchanged."""
     ordered = sorted(docs, key=lambda d: (d["source_id"], d["doc_id"]))
     kept: list[dict[str, Any]] = []
     removed: list[dict[str, Any]] = []
-    signatures: list[tuple[str, tuple[bytes, ...]]] = []
+    kept_sigs: dict[str, tuple[bytes, ...]] = {}
+    bands: list[dict[bytes, list[str]]] = []
     for doc in ordered:
         sig = minhash_signature(doc["text"], permutations=permutations)
+        keys = _band_keys(sig)
+        if not bands:
+            bands = [{} for _ in keys]
+        candidates: list[str] = []
+        seen_c: set[str] = set()
+        for band_index, key in enumerate(keys):
+            for other_id in bands[band_index].get(key, []):
+                if other_id not in seen_c:
+                    seen_c.add(other_id)
+                    candidates.append(other_id)
         dropped = False
-        for other_id, other_sig in signatures:
-            if estimated_jaccard(sig, other_sig) >= cutoff:
+        for other_id in candidates:
+            if estimated_jaccard(sig, kept_sigs[other_id]) >= cutoff:
                 removed.append(
                     {
                         "doc_id": doc["doc_id"],
@@ -85,8 +108,10 @@ def near_dedup(
                 dropped = True
                 break
         if not dropped:
-            signatures.append((doc["doc_id"], sig))
+            kept_sigs[doc["doc_id"]] = sig
             kept.append(doc)
+            for band_index, key in enumerate(keys):
+                bands[band_index].setdefault(key, []).append(doc["doc_id"])
     return kept, removed
 
 

@@ -11,11 +11,11 @@ from tiny_genius.config import REPO_ROOT
 from tiny_genius.data.metrics import build_metrics
 from tiny_genius.data.pipeline import (
     apply_mixture_cap,
+    collect_source_docs,
     docs_from_rows,
     load_pipeline_config,
     run_stages,
     source_inventory_records,
-    try_stream_hf,
     write_milestone_artifacts,
 )
 from tiny_genius.reproducibility import set_global_seed
@@ -35,6 +35,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=REPO_ROOT / "manifests" / "10m")
     parser.add_argument("--fixture", type=Path, default=None)
     parser.add_argument("--max-rows-per-source", type=int, default=4000)
+    parser.add_argument("--max-docs-per-source", type=int, default=25000)
     parser.add_argument("--no-tokenize", action="store_true")
     args = parser.parse_args()
 
@@ -57,13 +58,19 @@ def main() -> int:
             source = sources_by_id[rec["source_id"]]
             if rec["status"] == "blocked":
                 continue
-            rows, err = try_stream_hf(source, args.max_rows_per_source)
+            cap = int(thresholds["thresholds"]["codecontests_max_solutions_per_problem"]["value"])
+            fetched, err = collect_source_docs(
+                source,
+                data_cfg["collection_date"],
+                cap=cap,
+                max_docs=args.max_docs_per_source,
+            )
             if err:
                 rec["status"] = "blocked"
                 rec["block_reason"] = err
                 continue
-            rec["fetch_rows"] = len(rows)
-            docs.extend(docs_from_rows(rows, source, data_cfg["collection_date"]))
+            rec["fetch_rows"] = len(fetched)
+            docs.extend(fetched)
 
     result = run_stages(
         docs,

@@ -1,18 +1,24 @@
 # 10M milestone status
 
-**Not frozen.** High-quality data after the authorized Python reselection is
-still below 10M tokens, and STEM exclusive FineWeb buckets remain BLOCKED.
+**Not frozen.** `FROZEN_10M.json` is absent.
 
-Probe run (80 CodeContests+ problems + 80 OpenMathInstruct-2 rows):
+A real file-based run (not an 80-problem probe) produced:
 
-| Domain | Tokens after pipeline |
-|---|---:|
-| Python (CCP py3 correct, cap 8, English) | 457,196 |
-| Math (OMI-2) | 56,020 |
-| STEM | 0 |
-| **Total** | **513,216** |
+| Domain | Target | Actual |
+|---|---:|---:|
+| Python | 7,690,000 | 7,689,911 |
+| Math | 1,540,000 | 1,539,907 |
+| STEM | 770,000 | 0 |
+| **Total** | **10,000,000** | **9,229,818** |
 
-Scaling CCP further can grow Python, but STEM still has no authorized fetchable
-source, and this pass will not invent one. A 10M freeze is therefore withheld.
+Python and math hit the proportional caps. STEM is 0 because FineWeb-Edu parquet has
+**no subject/category field**; exclusive bucket allocation would invent labels.
 
-See `docs/python_dataset_selection.md` for KEEP/REJECT evidence.
+Retained Python tokens after mixture cap are all from CodeContests+ (`py3` correct).
+DeepMind / TACO / APPS were ingested from published parquet/JSONL and then removed
+by global exact/near-dedup and quality (they overlapped the contest lineage).
+
+Contamination: 368 hits against local HumanEval + MBPP + stage3-eval-v1; all
+**removed**; `n_unresolved = 0`. Refs live in gitignored `data/contamination_refs/`.
+
+Do not treat this directory as a frozen 10M training corpus.
