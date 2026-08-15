@@ -41,4 +41,6 @@ existing 9,229,818-token audit is labeled `STAGE4_SMOKE`
 only. Python KEEP is CodeContests+ (`py3` only);
 see `docs/python_dataset_selection.md`. STEM allocation is **Outcome B**
 (`docs/fineweb_edu_stem_probe.md`): official FineWeb-Edu has no exclusive
-subject labels. Gate G4 remains FAIL. Stage 5 is not started.
+subject labels. SmolLM-Corpus cannot authorize STEM (`docs/smollm_corpus_stem_probe.md`).
+STEM is waived for STAGE4_SMOKE only. Gate G4 remains FAIL. Stage 5 is not
+started.

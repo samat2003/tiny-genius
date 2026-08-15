@@ -28,3 +28,6 @@ Do not treat this directory as a frozen 10M training corpus.
 
 The same audit is labeled **STAGE4_SMOKE** in
 `manifests/stage4_smoke/STAGE4_SMOKE.json` for GPU training-path smoke only.
+
+STEM is waived for **STAGE4_SMOKE only**. G4 remains FAIL. Do not create
+`FROZEN_10M.json`.

@@ -25,6 +25,8 @@ def test_stage4_smoke_identity_and_g4_fail() -> None:
     payload = load_stage4_smoke()
     assert payload["identity"] == "STAGE4_SMOKE"
     assert payload["is_10m_milestone"] is False
+    assert payload["stage4_smoke_sufficient"] is True
+    assert payload["stem_waived_for_stage4_smoke_only"] is True
     assert payload["gate_g4"] == "FAIL"
     assert payload["total_tokens"] == TOTAL_TOKENS == 9_229_818
     assert payload["python_tokens"] == PYTHON_TOKENS

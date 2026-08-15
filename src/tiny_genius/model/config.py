@@ -46,6 +46,19 @@ class TinyModelConfig:
             raise ValueError("Project plan requires tied input/output embeddings")
         if self.n_layers < 1:
             raise ValueError("n_layers must be positive")
+        if self.name == "model_300m":
+            if (
+                self.n_layers != 24
+                or self.d_model != 960
+                or self.n_heads != 15
+                or self.d_head != 64
+                or self.d_ff != 2560
+                or self.n_ctx != 4096
+            ):
+                raise ValueError("model_300m must match the project-plan architecture")
+            if self.frozen:
+                raise ValueError("experimental 300M config must not be marked frozen")
+            return
         if not (512 <= self.d_ff <= 768):
             raise ValueError(
                 f"Stage 2 FFN hidden size must be in [512, 768], got {self.d_ff}"

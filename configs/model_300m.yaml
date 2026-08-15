@@ -1,0 +1,25 @@
+# Intended ~296.9M architecture from the project plan.
+# Experimental / not a frozen Stage 5 RUN SPEC. Not production pretraining.
+
+name: model_300m
+stage: 4
+frozen: false
+
+n_layers: 24
+d_model: 960
+n_heads: 15
+d_head: 64
+d_ff: 2560
+vocab_size: 32768
+n_ctx: 4096
+
+rms_norm_eps: 1.0e-6
+rope_theta: 10000.0
+tie_embeddings: true
+use_bias: false
+dropout: 0.0
+
+notes: >
+  Decoder-only, pre-norm RMSNorm, RoPE, SwiGLU, tied embeddings, no biases.
+  Expected closed-form parameters: 296,925,120. Experimental learning runs
+  may use this YAML; Stage 5 production training is not started.

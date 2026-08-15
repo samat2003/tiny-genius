@@ -191,6 +191,50 @@ sources:
     identity_status: blocked
     block_reason: Same official FineWeb-Edu schema — no exclusive ML/AI labels.
 
+  - source_id: smollm_fineweb_edu_dedup
+    domain: stem
+    claimed_origin: "HuggingFaceTB/smollm-corpus fineweb-edu-dedup"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus"
+    claimed_license: odc-by-1.0
+    identity_status: blocked
+    hf_id: HuggingFaceTB/smollm-corpus
+    hf_revision: 3ba9d605774198c5868892d7a8deda78031a781f
+    hf_config: fineweb-edu-dedup
+    block_reason: >
+      Official FineWeb-Edu-Dedup parquet: text,id,metadata.{dump,url,date,
+      file_path,language,language_score,token_count,score,int_score}. score
+      is educational quality, not subject. Treating this subset as STEM
+      invents labels. Same Outcome B as HuggingFaceFW/fineweb-edu.
+
+  - source_id: smollm_python_edu
+    domain: python
+    claimed_origin: "HuggingFaceTB/smollm-corpus python-edu"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus"
+    claimed_license: null
+    identity_status: blocked
+    hf_id: HuggingFaceTB/smollm-corpus
+    hf_config: python-edu
+    block_reason: >
+      Parquet has blob_id,repo_name,path,length_bytes,score,int_score only.
+      File text is not published; must be fetched from Software Heritage S3
+      under The Stack v2 terms. This is educational Python, not STEM. Python
+      10M cap is already filled by CodeContests+.
+
+  - source_id: smollm_cosmopedia_v2
+    domain: stem
+    claimed_origin: "HuggingFaceTB/smollm-corpus cosmopedia-v2"
+    claimed_url: "https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus"
+    claimed_license: odc-by-1.0
+    identity_status: blocked
+    hf_id: HuggingFaceTB/smollm-corpus
+    hf_config: cosmopedia-v2
+    block_reason: >
+      Mixtral-8x7B synthetic textbooks. Official columns: prompt,text,
+      token_length,audience,format,seed_data. seed_data is seed-source
+      (fineweb/stanford/openstax/auto_math_text/wikihow/...), not a STEM
+      subject. Stanford seeds include humanities (e.g. Asian filmmakers).
+      See docs/smollm_corpus_stem_probe.md.
+
 math_raw_estimate_tokens: 2_630_000_000
 math_plan_target_tokens: 2_000_000_000
 stem_raw_estimate_tokens: 1_000_000_000

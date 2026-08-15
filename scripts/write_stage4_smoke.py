@@ -33,11 +33,13 @@ def main() -> int:
     payload = {
         "identity": SMOKE_ID,
         "is_10m_milestone": False,
+        "stage4_smoke_sufficient": True,
+        "stem_waived_for_stage4_smoke_only": True,
         "gate_g4": "FAIL",
         "gate_g4_reason": (
             "The exact 10M milestone is not frozen because STEM=0 and the "
-            "corpus contains 9,229,818 tokens. STAGE4_SMOKE is an engineering "
-            "validation corpus only."
+            "corpus contains 9,229,818 tokens. STEM is waived for the "
+            "STAGE4_SMOKE engineering/learning experiment only."
         ),
         "frozen_10m_json": False,
         "python_tokens": PYTHON_TOKENS,
@@ -50,8 +52,8 @@ def main() -> int:
         "audit_sha256": hashes,
         "corpus_hash": corpus_hash(AUDIT_DIR),
         "notes": (
-            "Preserved Stage 4 Python/Math audit after exclusive-STEM Outcome B. "
-            "Not a production pre-training corpus. Do not call this 10M."
+            "STAGE4_SMOKE is sufficient for the Stage 4 engineering/learning "
+            "smoke only. STEM=0 is waived for that smoke. Not 10M. Not G4."
         ),
     }
     SMOKE_DIR.mkdir(parents=True, exist_ok=True)
@@ -66,6 +68,7 @@ def main() -> int:
         f"- Math = {MATH_TOKENS:,}\n"
         f"- STEM = {STEM_TOKENS}\n"
         "- Gate G4 remains **FAIL**\n"
+        "- STEM waived for this smoke experiment only\n"
         "- `FROZEN_10M.json` must not be created\n",
         encoding="utf-8",
     )

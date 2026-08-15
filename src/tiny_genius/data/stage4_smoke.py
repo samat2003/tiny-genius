@@ -60,6 +60,10 @@ def validate_stage4_smoke(payload: dict[str, Any], *, audit_dir: Path = AUDIT_DI
         errors.append("is_10m_milestone must be false")
     if payload.get("gate_g4") != "FAIL":
         errors.append("gate_g4 must be FAIL")
+    if payload.get("stage4_smoke_sufficient") is not True:
+        errors.append("stage4_smoke_sufficient must be true")
+    if payload.get("stem_waived_for_stage4_smoke_only") is not True:
+        errors.append("STEM waiver for STAGE4_SMOKE only must be recorded")
     if payload.get("frozen_10m_json") is not False:
         errors.append("frozen_10m_json must be false")
     if FROZEN_10M.is_file():

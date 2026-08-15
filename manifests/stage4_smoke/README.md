@@ -7,4 +7,5 @@ Engineering/training-path smoke corpus. **Not** the 10M milestone.
 - Math = 1,539,907
 - STEM = 0
 - Gate G4 remains **FAIL**
+- STEM waived for this smoke experiment only
 - `FROZEN_10M.json` must not be created
